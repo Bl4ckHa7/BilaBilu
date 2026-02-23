@@ -7,7 +7,7 @@
 
     body {
       min-height: 100vh;
-      background: #F2F2F2;  /* fundo claro */
+      background: #BF8275;  /* fundo claro */
       background-image: radial-gradient(circle at 10% 20%, rgba(242, 209, 201, 0.4) 0%, transparent 30%),
                         radial-gradient(circle at 90% 80%, rgba(217, 127, 119, 0.15) 0%, transparent 40%);
       font-family: 'Montserrat', sans-serif;

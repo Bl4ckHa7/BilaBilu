@@ -10,14 +10,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/stylesite.css">
+    <link rel="stylesheet" href="css/style2.css">
 </head>
 <body>
     <!-- Partículas de fundo (canvas) -->
     <canvas id="particles-canvas"></canvas>
-
-    <!-- Efeito que segue o cursor -->
-    <div class="cursor-glow" id="cursorGlow"></div>
 
     <!-- Loader -->
     <div class="loader" id="loader">
@@ -41,11 +38,6 @@
             <li><a href="#colecoes">Coleções</a></li>
             <li><a href="#sobre">Sobre</a></li>
             <li><a href="#contato">Contato</a></li>
-            <li>
-            <button id="dark-mode-toggle" class="dark-mode-btn" aria-label="Alternar modo escuro">
-            <i class="fas fa-moon"></i>
-            </button>
-            </li>
         </ul>
     </nav>
 
@@ -311,13 +303,6 @@
                 if (e.target === modal) modal.classList.remove('active');
             });
 
-            // ===== EFEITO CURSOR GLOW =====
-            const cursorGlow = document.getElementById('cursorGlow');
-            document.addEventListener('mousemove', (e) => {
-                cursorGlow.style.left = e.clientX + 'px';
-                cursorGlow.style.top = e.clientY + 'px';
-            });
-
             // ===== PARTÍCULAS DE FUNDO (CANVAS) =====
             const canvas = document.getElementById('particles-canvas');
             const ctx = canvas.getContext('2d');
@@ -365,34 +350,65 @@
 
             initParticles();
             animateParticles();
+
+            // ===== RASTRO DO MOUSE =====
+            const trailCanvas = document.createElement('canvas');
+            trailCanvas.id = 'mouse-trail';
+            document.body.appendChild(trailCanvas);
+            const trailCtx = trailCanvas.getContext('2d');
+            let trailWidth, trailHeight;
+            let mouseX = 0, mouseY = 0;
+            let trailPositions = [];
+
+            function initTrailCanvas() {
+                trailWidth = window.innerWidth;
+                trailHeight = window.innerHeight;
+                trailCanvas.width = trailWidth;
+                trailCanvas.height = trailHeight;
+            }
+
+            function updateTrail() {
+                // Adiciona posição atual do mouse no início do array
+                trailPositions.unshift({ x: mouseX, y: mouseY, age: 0 });
+                
+                // Limita o tamanho do rastro (30 partículas)
+                if (trailPositions.length > 30) {
+                    trailPositions.pop();
+                }
+                
+                // Incrementa a idade de cada partícula
+                trailPositions.forEach(p => p.age++);
+                
+                // Desenha o rastro
+                trailCtx.clearRect(0, 0, trailWidth, trailHeight);
+                trailPositions.forEach((p, index) => {
+                    const opacity = Math.max(0, 1 - p.age / 30); // diminui com o tempo
+                    const size = 8 * (1 - p.age / 30); // diminui de tamanho
+                    trailCtx.beginPath();
+                    trailCtx.arc(p.x, p.y, size, 0, Math.PI * 2);
+                    trailCtx.fillStyle = `rgba(217, 127, 119, ${opacity * 0.4})`; // cor do destaque com transparência
+                    trailCtx.fill();
+                });
+                
+                requestAnimationFrame(updateTrail);
+            }
+
+            // Evento para capturar a posição do mouse
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Inicializa o canvas do rastro quando a janela carregar
+            window.addEventListener('load', () => {
+                initTrailCanvas();
+                updateTrail();
+            });
+
+            window.addEventListener('resize', () => {
+                initTrailCanvas();
+            });
         })();
-        // ===== MODO ESCURO =====
-const darkModeToggle = document.getElementById('dark-mode-toggle');
-const body = document.body;
-const icon = darkModeToggle.querySelector('i');
-
-// Verifica localStorage
-if (localStorage.getItem('theme') === 'dark') {
-    body.classList.add('dark-mode');
-    icon.classList.remove('fa-moon');
-    icon.classList.add('fa-sun');
-}
-
-darkModeToggle.addEventListener('click', () => {
-    body.classList.toggle('dark-mode');
-    const isDark = body.classList.contains('dark-mode');
-    
-    // Troca ícone
-    if (isDark) {
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-        localStorage.setItem('theme', 'dark');
-    } else {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-        localStorage.setItem('theme', 'light');
-    }
-});
     </script>
 </body>
 </html>
