@@ -1,0 +1,531 @@
+   /* ===== VARIÁVEIS DA PALETA ===== */
+        :root {
+            --fundo: #F2F2F2;
+            --pastel-1: #F2D1B3;
+            --pastel-2: #F2D1C9;
+            --medio: #BF8275;
+            --destaque: #D97F77;
+            --texto: #2c1e1a;
+            --sombra-clara: rgba(191, 130, 117, 0.25);
+            --sombra-media: rgba(191, 130, 117, 0.4);
+            --sombra-forte: rgba(191, 130, 117, 0.6);
+        }
+
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--fundo);
+            color: var(--texto);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            scroll-behavior: smooth; /* smooth scroll global */
+        }
+
+        /* ===== ANIMAÇÃO DE FUNDO (PARTÍCULAS) ===== */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        /* ===== EFEITO QUE SEGUE O CURSOR ===== */
+        .cursor-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--pastel-1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: soft-light;
+            transition: width 0.2s ease, height 0.2s ease;
+        }
+
+        @media (max-width: 768px) {
+            .cursor-glow {
+                display: none;
+            }
+        }
+
+        /* ===== LOADER ===== */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 242, 237, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.6s ease;
+        }
+        .loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid var(--pastel-1);
+            border-top-color: var(--destaque);
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ===== HEADER COM PONTINHOS BRILHANTES ===== */
+        header {
+            background: linear-gradient(145deg, #b55a4a, #e6938a); /* cores mais fortes */
+            color: white;
+            padding: 3rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 12px 30px var(--sombra-forte);
+        }
+        /* Animação de pontinhos brilhantes */
+        .glow-dots {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.2) 0%, transparent 5%),
+                        radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 5%),
+                        radial-gradient(circle at 40% 80%, rgba(255,255,255,0.15) 0%, transparent 8%),
+                        radial-gradient(circle at 90% 20%, rgba(255,255,255,0.15) 0%, transparent 8%),
+                        radial-gradient(circle at 10% 60%, rgba(255,255,255,0.1) 0%, transparent 10%);
+            background-size: 200% 200%;
+            animation: glowMove 12s ease-in-out infinite alternate;
+            z-index: 0;
+            pointer-events: none;
+        }
+        @keyframes glowMove {
+            0% { background-position: 0% 0%; opacity: 0.5; }
+            50% { background-position: 100% 100%; opacity: 0.8; }
+            100% { background-position: 0% 100%; opacity: 0.5; }
+        }
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        .header-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5), 0 0 20px rgba(255,215,0,0.3); /* brilho dourado suave */
+        }
+        .header-content p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* ===== NAVEGAÇÃO COM SOMBRA FORTE ===== */
+        nav {
+            background: var(--pastel-1);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            box-shadow: 0 10px 25px var(--sombra-media);
+        }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: var(--texto);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+        }
+        nav a:hover {
+            background: var(--destaque);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px var(--sombra-media);
+        }
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* ===== HERO COM SOMBRA FORTE ===== */
+        .hero {
+            background: var(--pastel-2);
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 40px;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px var(--sombra-forte);
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: var(--pastel-1);
+            border-radius: 50%;
+            top: -50px;
+            right: -50px;
+            opacity: 0.3;
+        }
+        .hero h2 {
+            font-size: 2.5rem;
+            color: var(--destaque);
+        }
+        .hero .btn {
+            margin: 0.5rem;
+        }
+
+        /* ===== SEÇÕES ===== */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: var(--medio);
+            margin: 3rem 0 1.5rem;
+            position: relative;
+            display: inline-block;
+            text-shadow: 2px 2px 4px var(--sombra-clara);
+        }
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 70%;
+            height: 3px;
+            background: var(--destaque);
+            box-shadow: 0 2px 6px var(--sombra-media);
+        }
+
+        /* ===== CARDS DE PRODUTOS COM SOMBRA FORTE ===== */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .product-card {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px var(--sombra-media);
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 45px var(--sombra-forte);
+        }
+        .product-image {
+            height: 220px;
+            overflow: hidden;
+        }
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        .product-info {
+            padding: 1.5rem;
+        }
+        .product-info h3 {
+            color: var(--medio);
+            margin-bottom: 0.5rem;
+        }
+        .price {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--destaque);
+            display: block;
+            margin: 1rem 0;
+        }
+        .btn {
+            background: var(--medio);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 18px var(--sombra-media);
+        }
+        .btn:hover {
+            background: var(--destaque);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px var(--sombra-forte);
+        }
+
+        /* ===== CARROSSEL COM SOMBRA FORTE ===== */
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+            margin: 2rem 0;
+            box-shadow: 0 20px 40px var(--sombra-forte);
+        }
+        .carousel-inner {
+            display: flex;
+            transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.3, 1);
+        }
+        .carousel-item {
+            min-width: 100%;
+            position: relative;
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        .carousel-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.7);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 8px 18px var(--sombra-media);
+        }
+        .carousel-control:hover {
+            background: var(--destaque);
+            color: white;
+            transform: translateY(-50%) scale(1.08);
+            box-shadow: 0 15px 25px var(--sombra-forte);
+        }
+        .prev { left: 20px; }
+        .next { right: 20px; }
+
+        /* ===== COLEÇÕES ===== */
+        .collections {
+            background: var(--pastel-1);
+            padding: 3rem 0;
+            margin: 3rem 0;
+            box-shadow: inset 0 5px 20px var(--sombra-clara), 0 20px 40px var(--sombra-forte);
+        }
+
+        /* ===== SOBRE COM SOMBRA FORTE ===== */
+        #sobre {
+            background: white;
+            padding: 2rem;
+            border-radius: 30px;
+            box-shadow: 0 20px 40px var(--sombra-forte);
+        }
+        #show-more-btn {
+            margin-top: 1rem;
+        }
+
+        /* ===== CONTATO ===== */
+        #contact-form input,
+        #contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--pastel-1);
+            border-radius: 25px;
+            font-family: inherit;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: inset 0 3px 8px var(--sombra-clara);
+        }
+        #contact-form input:focus,
+        #contact-form textarea:focus {
+            border-color: var(--destaque);
+            outline: none;
+            box-shadow: 0 0 0 4px var(--sombra-clara);
+        }
+        #form-success {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,100,0,0.2);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--medio);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            box-shadow: 0 -10px 30px var(--sombra-forte);
+        }
+        footer a {
+            color: white;
+            margin: 0 0.5rem;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        footer a:hover {
+            color: var(--pastel-1);
+            transform: translateY(-4px);
+            filter: drop-shadow(0 6px 8px rgba(0,0,0,0.3));
+        }
+
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--destaque);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 99;
+            box-shadow: 0 10px 25px var(--sombra-forte);
+        }
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .back-to-top:hover {
+            background: var(--medio);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px var(--sombra-forte);
+        }
+
+        /* ===== MODAL ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        .modal.active {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            max-width: 600px;
+            width: 90%;
+            padding: 2rem;
+            border-radius: 30px;
+            position: relative;
+            animation: fadeIn 0.4s ease;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.3);
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--destaque);
+            transition: transform 0.2s ease;
+        }
+        .close-modal:hover {
+            transform: scale(1.1);
+        }
+
+        /* Botão de alternância */
+.dark-mode-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--texto);
+    padding: 0.5rem 1rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+.dark-mode-btn:hover {
+    background: var(--destaque);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px var(--sombra-media);
+}
+
+/* Modo escuro */
+body.dark-mode {
+    --fundo: #1a1a1a;
+    --pastel-1: #3a3a3a;
+    --pastel-2: #4a4a4a;
+    --medio: #5a5a5a;
+    --destaque: #d97f77; /* mantido para destaque */
+    --texto: #f0f0f0;
+    --sombra-clara: rgba(255,255,255,0.1);
+    --sombra-media: rgba(255,255,255,0.2);
+    --sombra-forte: rgba(255,255,255,0.3);
+}
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ===== RESPONSIVO ===== */
+        @media (max-width: 768px) {
+            .header-content h1 { font-size: 2.5rem; }
+            nav ul { gap: 0.5rem; }
+            nav a { font-size: 0.9rem; }
+            .hero h2 { font-size: 2rem; }
+        }

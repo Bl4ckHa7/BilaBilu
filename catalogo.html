@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Bila Bilu · Arte em Crochê</title>
+    <!-- Font Awesome (ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/stylesite.css">
+</head>
+<body>
+    <!-- Partículas de fundo (canvas) -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Efeito que segue o cursor -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header com pontinhos brilhantes -->
+    <header>
+        <div class="glow-dots"></div>
+        <div class="header-content">
+            <h1>Bila Bilu</h1>
+            <p>Receitas exclusivas e amigurumis personalizados feitos com amor</p>
+        </div>
+    </header>
+
+    <!-- Navegação -->
+    <nav>
+        <ul>
+            <li><a href="#receitas">Receitas</a></li>
+            <li><a href="#bonecos">Bonecos</a></li>
+            <li><a href="#colecoes">Coleções</a></li>
+            <li><a href="#sobre">Sobre</a></li>
+            <li><a href="#contato">Contato</a></li>
+            <li>
+            <button id="dark-mode-toggle" class="dark-mode-btn" aria-label="Alternar modo escuro">
+            <i class="fas fa-moon"></i>
+            </button>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <!-- Receitas -->
+        <section id="receitas">
+            <h2 class="section-title">Receitas de Crochê</h2>
+            <div class="products" id="recipes-container"></div>
+        </section>
+
+        <!-- Bonecos e Carrossel -->
+        <section id="bonecos">
+            <h2 class="section-title">Bonecos Personalizados</h2>
+
+            <div class="carousel">
+                <div class="carousel-inner" id="dolls-carousel">
+                    <div class="carousel-item">
+                        <img src="Imagens/IMG_0913.PNG" alt="Bonecos de crochê">
+                        <div class="carousel-caption">
+                            <h3>Bonecos Personalizados</h3>
+                            <p>Criados especialmente para você</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Imagens/IMG_0921.PNG" alt="Bonecos de casal">
+                        <div class="carousel-caption">
+                            <h3>Casais Personalizados</h3>
+                            <p>Presentes únicos para ocasiões especiais</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="Imagens/IMG_0909.PNG" alt="Bonecos de bebê">
+                        <div class="carousel-caption">
+                            <h3>Bonecos de Bebê</h3>
+                            <p>Recordações fofas do seu pequeno</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control prev">&#10094;</button>
+                <button class="carousel-control next">&#10095;</button>
+            </div>
+
+            <div class="products" id="dolls-container"></div>
+        </section>
+    </div>
+
+    <!-- Coleções (fundo diferenciado) -->
+    <section class="collections" id="colecoes">
+        <div class="container">
+            <h2 class="section-title">Nossas Coleções</h2>
+            <div class="products" id="collections-container"></div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Sobre -->
+        <section id="sobre">
+            <h2 class="section-title">Sobre Nós</h2>
+            <p>Somos artesãos apaixonados por crochê, criando peças únicas e especiais desde 2010. Nossa missão é espalhar o amor pelo artesanato através de receitas detalhadas e bonecos personalizados que carregam histórias e significados especiais.</p>
+            <button id="show-more-btn" class="btn">Mostrar Mais</button>
+            <div id="more-content" style="display: none; margin-top: 20px;">
+                <p>Trabalhamos com materiais de alta qualidade e cada peça é feita com atenção aos detalhes. Nossas receitas são testadas e aprovadas por diversas artesãs antes de serem disponibilizadas para venda.</p>
+                <p>Além de vender receitas e bonecos prontos, oferecemos workshops online para quem quer aprender ou aprimorar suas técnicas de crochê.</p>
+            </div>
+        </section>
+
+        <!-- Contato -->
+        <section id="contato">
+            <h2 class="section-title">Contato</h2>
+            <form id="contact-form" style="max-width: 500px; margin: 0 auto;">
+                <div style="margin-bottom: 15px;">
+                    <label for="name">Nome:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="message">Mensagem:</label>
+                    <textarea id="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="btn">Enviar Mensagem</button>
+            </form>
+            <div id="form-success" style="display: none;"></div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; <span id="current-year"></span> Bila Bilu - Todos os direitos reservados</p>
+        <div>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+    </footer>
+
+    <!-- Botão back to top -->
+    <div class="back-to-top" id="back-to-top" title="Voltar ao topo">↑</div>
+
+    <!-- Modal de produto -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ===== LOADER =====
+            window.addEventListener('load', function() {
+                document.getElementById('loader').classList.add('hidden');
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                }, 600);
+            });
+
+            // ===== ANO ATUAL =====
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            // ===== BOTÃO MOSTAR MAIS =====
+            const showMoreBtn = document.getElementById('show-more-btn');
+            const moreContent = document.getElementById('more-content');
+            showMoreBtn.addEventListener('click', () => {
+                if (moreContent.style.display === 'none') {
+                    moreContent.style.display = 'block';
+                    showMoreBtn.textContent = 'Mostrar Menos';
+                } else {
+                    moreContent.style.display = 'none';
+                    showMoreBtn.textContent = 'Mostrar Mais';
+                }
+            });
+
+            // ===== FORMULÁRIO DE CONTATO =====
+            const contactForm = document.getElementById('contact-form');
+            const formSuccess = document.getElementById('form-success');
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                formSuccess.style.display = 'block';
+                formSuccess.textContent = 'Mensagem enviada com sucesso! Entraremos em contato em breve.';
+                contactForm.reset();
+                setTimeout(() => {
+                    formSuccess.style.display = 'none';
+                }, 4000);
+            });
+
+            // ===== BACK TO TOP =====
+            const backToTop = document.getElementById('back-to-top');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTop.classList.add('active');
+                } else {
+                    backToTop.classList.remove('active');
+                }
+            });
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // ===== CARROSSEL =====
+            const carouselInner = document.querySelector('.carousel-inner');
+            const items = document.querySelectorAll('.carousel-item');
+            const prevBtn = document.querySelector('.prev');
+            const nextBtn = document.querySelector('.next');
+            let currentIndex = 0;
+
+            function updateCarousel() {
+                carouselInner.style.transform = `translateX(-${currentIndex * 100}%)`;
+            }
+            prevBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + items.length) % items.length;
+                updateCarousel();
+            });
+            nextBtn.addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % items.length;
+                updateCarousel();
+            });
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % items.length;
+                updateCarousel();
+            }, 6000);
+
+            // ===== DADOS DOS PRODUTOS (SIMULAÇÃO) =====
+            const productsData = {
+                recipes: [
+                    { id: 0, title: "Receita: Ursinho Fofinho", description: "Passo a passo completo para criar um lindo ursinho de crochê.", price: 25.90, image: "Imagens/IMG_0913.PNG" },
+                    { id: 1, title: "Receita: Boneca Primavera", description: "Tutorial detalhado para fazer uma boneca com vestido florido.", price: 29.90, image: "Imagens/IMG_0913.PNG" },
+                    { id: 2, title: "Receita: Conjunto Natalino", description: "Padrões para criar enfeites e bonecos de Natal.", price: 34.90, image: "Imagens/IMG_0913.PNG" }
+                ],
+                dolls: [
+                    { id: 101, title: "Boneco Personalizado", description: "Encomende um boneco único feito especialmente para você.", price: 89.90, image: "Imagens/IMG_0913.PNG" },
+                    { id: 102, title: "Casais Personalizados", description: "Bonecos feitos sob medida para presentear casais.", price: 149.90, image: "Imagens/IMG_0921.PNG" },
+                    { id: 103, title: "Bonecos de Bebês", description: "Replique seu bebê em uma versão fofa de crochê.", price: 119.90, image: "Imagens/IMG_0909.PNG" }
+                ],
+                collections: [
+                    { id: 201, title: "Coleção Inverno", description: "Bonecos e acessórios com tema de inverno.", image: "Imagens/IMG_0913.PNG" },
+                    { id: 202, title: "Coleção Personagens", description: "Seus personagens favoritos em versão crochê.", image: "Imagens/IMG_0921.PNG" },
+                    { id: 203, title: "Coleção Animais", description: "Diversos animais fofos feitos com crochê.", image: "Imagens/IMG_0909.PNG" }
+                ]
+            };
+
+            function renderProducts(containerId, items, type) {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.innerHTML = `
+                        <div class="product-image"><img src="${item.image}" alt="${item.title}"></div>
+                        <div class="product-info">
+                            <h3>${item.title}</h3>
+                            <p>${item.description}</p>
+                            ${item.price ? `<span class="price">R$ ${item.price.toFixed(2)}</span>` : ''}
+                            <button class="btn view-product" data-id="${item.id}" data-type="${type}">Ver Detalhes</button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            renderProducts('recipes-container', productsData.recipes, 'recipe');
+            renderProducts('dolls-container', productsData.dolls, 'doll');
+            renderProducts('collections-container', productsData.collections, 'collection');
+
+            // ===== MODAL =====
+            const modal = document.getElementById('product-modal');
+            const modalContent = document.getElementById('modal-content');
+            const closeModal = document.querySelector('.close-modal');
+
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('view-product')) {
+                    const id = parseInt(e.target.dataset.id);
+                    const type = e.target.dataset.type;
+                    let product;
+                    if (type === 'recipe') product = productsData.recipes.find(p => p.id === id);
+                    else if (type === 'doll') product = productsData.dolls.find(p => p.id === id);
+                    else product = productsData.collections.find(p => p.id === id);
+
+                    if (product) {
+                        modalContent.innerHTML = `
+                            <h2>${product.title}</h2>
+                            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                                <img src="${product.image}" style="flex:1; min-width:200px; max-width:100%; border-radius:15px;">
+                                <div style="flex:2;">
+                                    <p>${product.description}</p>
+                                    ${product.price ? `<p class="price">R$ ${product.price.toFixed(2)}</p>` : ''}
+                                    <button class="btn">Adicionar ao Carrinho</button>
+                                </div>
+                            </div>
+                        `;
+                        modal.classList.add('active');
+                    }
+                }
+            });
+
+            closeModal.addEventListener('click', () => modal.classList.remove('active'));
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            });
+
+            // ===== EFEITO CURSOR GLOW =====
+            const cursorGlow = document.getElementById('cursorGlow');
+            document.addEventListener('mousemove', (e) => {
+                cursorGlow.style.left = e.clientX + 'px';
+                cursorGlow.style.top = e.clientY + 'px';
+            });
+
+            // ===== PARTÍCULAS DE FUNDO (CANVAS) =====
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            function initParticles() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                particles = [];
+                const particleCount = 35;
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        size: Math.random() * 2.5 + 1,
+                        speedX: (Math.random() - 0.5) * 0.2,
+                        speedY: (Math.random() - 0.5) * 0.2,
+                        color: `rgba(217, 127, 119, ${Math.random() * 0.3})`
+                    });
+                }
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    if (p.x < 0 || p.x > width) p.speedX *= -1;
+                    if (p.y < 0 || p.y > height) p.speedY *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                });
+                requestAnimationFrame(animateParticles);
+            }
+
+            window.addEventListener('resize', () => {
+                initParticles();
+            });
+
+            initParticles();
+            animateParticles();
+        })();
+        // ===== MODO ESCURO =====
+const darkModeToggle = document.getElementById('dark-mode-toggle');
+const body = document.body;
+const icon = darkModeToggle.querySelector('i');
+
+// Verifica localStorage
+if (localStorage.getItem('theme') === 'dark') {
+    body.classList.add('dark-mode');
+    icon.classList.remove('fa-moon');
+    icon.classList.add('fa-sun');
+}
+
+darkModeToggle.addEventListener('click', () => {
+    body.classList.toggle('dark-mode');
+    const isDark = body.classList.contains('dark-mode');
+    
+    // Troca ícone
+    if (isDark) {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+        localStorage.setItem('theme', 'dark');
+    } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+        localStorage.setItem('theme', 'light');
+    }
+});
+    </script>
+</body>
+</html>

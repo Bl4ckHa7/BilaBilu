@@ -1,0 +1,161 @@
+ /* ===== RESET E BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #F2F2F2;  /* fundo claro */
+      background-image: radial-gradient(circle at 10% 20%, rgba(242, 209, 201, 0.4) 0%, transparent 30%),
+                        radial-gradient(circle at 90% 80%, rgba(217, 127, 119, 0.15) 0%, transparent 40%);
+      font-family: 'Montserrat', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    /* ===== CARD PRINCIPAL ===== */
+    .card {
+      max-width: 700px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      border-radius: 2.5rem;
+      padding: 3rem 2.5rem;
+      box-shadow: 0 25px 40px -15px rgba(191, 130, 117, 0.3);
+      border: 1px solid #F2D1C9;  /* borda suave */
+      text-align: center;
+    }
+
+    /* ===== TÍTULO ===== */
+    .titulo-principal {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.8rem;
+      font-weight: 400;
+      color: #BF8275;  /* tom médio */
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .titulo-principal span {
+      display: block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #D97F77;  /* tom mais vibrante */
+      border-top: 1px solid #F2D1C9;
+      padding-top: 0.8rem;
+      margin-top: 0.3rem;
+    }
+
+    /* ===== BOLINHAS DE REDES SOCIAIS ===== */
+    .redes-sociais {
+      display: flex;
+      justify-content: center;
+      gap: 1.2rem;
+      margin: 2rem 0 2.5rem;
+      flex-wrap: wrap;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.5rem;
+      height: 3.5rem;
+      background: #F2D1B3;  /* tom pastel */
+      border-radius: 50%;
+      color: #BF8275;
+      font-size: 1.6rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 12px rgba(191, 130, 117, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+    }
+
+    .social-link:hover {
+      background: #BF8275;  /* tom mais escuro */
+      color: white;
+      transform: translateY(-5px);
+      box-shadow: 0 12px 18px rgba(191, 130, 117, 0.4);
+    }
+
+    /* ===== BOTÃO GRANDE PARA O CATÁLOGO ===== */
+    .botao-catalogo {
+      display: inline-block;
+      background-color: #BF8275;  /* tom médio */
+      color: white;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-decoration: none;
+      padding: 1.8rem 3.5rem;
+      border-radius: 4rem;
+      box-shadow: 0 12px 20px rgba(191, 130, 117, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      margin: 2rem 0 2rem;
+      width: auto;
+      min-width: 280px;
+    }
+
+    .botao-catalogo:hover {
+      background-color: #D97F77;  /* tom mais vibrante */
+      transform: scale(1.05);
+      box-shadow: 0 18px 28px rgba(217, 127, 119, 0.5);
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .botao-catalogo:active {
+      transform: scale(0.98);
+    }
+
+    /* ===== RODAPÉ DECORATIVO ===== */
+    .decorativo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      color: #D97F77;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-top: 2.8rem;
+    }
+
+    .decorativo i {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      color: #BF8275;
+    }
+
+    /* ===== RESPONSIVIDADE ===== */
+    @media (max-width: 550px) {
+      .card {
+        padding: 2rem 1.5rem;
+      }
+      .titulo-principal {
+        font-size: 2.8rem;
+      }
+      .titulo-principal span {
+        font-size: 1.5rem;
+        letter-spacing: 3px;
+      }
+      .botao-catalogo {
+        font-size: 1.5rem;
+        padding: 1.2rem 2rem;
+        min-width: 220px;
+      }
+      .social-link {
+        width: 3rem;
+        height: 3rem;
+        font-size: 1.4rem;
+      }
+    }
