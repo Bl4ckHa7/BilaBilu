@@ -54,6 +54,14 @@
       margin-top: 0.3rem;
     }
 
+    .titulo-principal img {
+      width: 300px;
+      margin-bottom: 1rem;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+    }
+
+
+
     /* ===== BOLINHAS DE REDES SOCIAIS ===== */
     .redes-sociais {
       display: flex;
