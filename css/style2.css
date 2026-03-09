@@ -81,7 +81,7 @@ body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ===== HEADER COM PONTOS DE LUZ SUAVES E NÍTIDOS ===== */
+/* ===== HEADER COM BORBOLETAS ===== */
 header {
     background: linear-gradient(145deg, #b55a4a, #e6938a);
     color: white;
@@ -98,30 +98,35 @@ header img {
     filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
 
-.glow-dots {
+/* Borboletas flutuantes */
+.butterflies {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: 
-        radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.5) 0%, transparent 4%),
-        radial-gradient(circle at 85% 60%, rgba(255, 240, 200, 0.4) 0%, transparent 5%),
-        radial-gradient(circle at 45% 80%, rgba(255, 255, 240, 0.3) 0%, transparent 6%),
-        radial-gradient(circle at 70% 15%, rgba(255, 250, 210, 0.4) 0%, transparent 5%),
-        radial-gradient(circle at 30% 70%, rgba(255, 245, 230, 0.35) 0%, transparent 6%),
-        radial-gradient(circle at 90% 85%, rgba(255, 255, 250, 0.3) 0%, transparent 7%);
-    background-size: 250% 250%;
-    animation: glowMove 10s ease-in-out infinite alternate;
-    z-index: 0;
+    overflow: hidden;
     pointer-events: none;
-    opacity: 0.7;
+    z-index: 0;
 }
 
-@keyframes glowMove {
-    0% { background-position: 0% 0%; opacity: 0.5; }
-    50% { background-position: 100% 100%; opacity: 0.9; }
-    100% { background-position: 0% 100%; opacity: 0.6; }
+.butterfly {
+    position: absolute;
+    font-size: 2rem;
+    opacity: 0.5;
+    animation: floatButterfly 12s infinite ease-in-out;
+    transform-origin: center;
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 10px rgba(255, 255, 200, 0.8);
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+}
+
+@keyframes floatButterfly {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+    25% { transform: translate(15px, -10px) rotate(5deg) scale(1.05); }
+    50% { transform: translate(-10px, 15px) rotate(-3deg) scale(0.98); }
+    75% { transform: translate(12px, -8px) rotate(4deg) scale(1.02); }
+    100% { transform: translate(0, 0) rotate(0deg) scale(1); }
 }
 
 .header-content {

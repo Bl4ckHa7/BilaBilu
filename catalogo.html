@@ -21,29 +21,42 @@
         <div class="spinner"></div>
     </div>
 
-    <!-- Header com pontinhos brilhantes -->
+    <!-- Header com borboletas flutuantes -->
     <header>
-        <div class="glow-dots"></div>
+        <div class="butterflies">
+            <span class="butterfly" style="top:5%; left:2%; animation-delay:0s; font-size:2.2rem;">🦋</span>
+            <span class="butterfly" style="top:15%; left:85%; animation-delay:1.2s; font-size:2.8rem;">🦋</span>
+            <span class="butterfly" style="top:60%; left:10%; animation-delay:2.5s; font-size:2rem;">🦋</span>
+            <span class="butterfly" style="top:75%; left:70%; animation-delay:0.8s; font-size:3rem;">🦋</span>
+            <span class="butterfly" style="top:30%; left:40%; animation-delay:3s; font-size:2.4rem;">🦋</span>
+            <span class="butterfly" style="top:80%; left:20%; animation-delay:1.8s; font-size:2.6rem;">🦋</span>
+            <span class="butterfly" style="top:45%; left:92%; animation-delay:2.2s; font-size:2.2rem;">🦋</span>
+            <span class="butterfly" style="top:10%; left:60%; animation-delay:0.3s; font-size:3.2rem;">🦋</span>
+            <span class="butterfly" style="top:70%; left:45%; animation-delay:2.7s; font-size:2rem;">🦋</span>
+            <span class="butterfly" style="top:85%; left:80%; animation-delay:1.5s; font-size:2.8rem;">🦋</span>
+            <span class="butterfly" style="top:25%; left:15%; animation-delay:3.2s; font-size:2.5rem;">🦋</span>
+            <span class="butterfly" style="top:50%; left:75%; animation-delay:0.5s; font-size:2.9rem;">🦋</span>
+        </div>
         <div class="header-content">
             <img src="css/Imagens/Logo BilaBilu.png" alt="BilaBilu">
             <p>Receitas exclusivas e amigurumis personalizados feitos com amor</p>
         </div>
     </header>
 
-    <!-- Navegação -->
+    <!-- Navegação corrigida -->
     <nav>
         <ul>
             <li><a href="#receitas">Santinhas</a></li>
-            <li><a href="#bonecos">Bonecas</a></li>
+            <li><a href="#bonecos">Bonecos</a></li>
             <li><a href="#colecoes">Personagens</a></li>
-            <li><a href="#sobre">Bonecos</a></li>
+            <li><a href="#sobre">Sobre</a></li>
             <li><a href="#contato">Contato</a></li>
         </ul>
     </nav>
 
     <div class="container">
 
-        <!-- Receitas -->
+        <!-- Receitas (Santinhas) -->
         <section id="receitas">
             <h2 class="section-title">Santinhas</h2>
             <div class="products" id="recipes-container"></div>
@@ -224,7 +237,7 @@
                 updateCarousel();
             }, 6000);
 
-            // ===== DADOS DOS PRODUTOS (SIMULAÇÃO) =====
+            // ===== DADOS DOS PRODUTOS (com caminhos corrigidos) =====
             const productsData = {
                 recipes: [
                     { id: 0, title: "Mãezinha do Céu", description: "Feito em crochê fio 100% algodão tamanho 25cm. (base até a coroa)", price: 240, image: "css/Imagens/Mãezinhadocéu.jpeg" },
@@ -235,14 +248,14 @@
                     { id: 5, title: "Nossa Senhora Aparecida (manto com flores)", description: "Feito em crochê fio 100% algodão tamanho 35cm. (base até a coroa)", price: 320, image: "css/Imagens/Nossasenhora3.jpeg" }
                 ],
                 dolls: [
-                    { id: 101, title: "Boneco Personalizado", description: "Encomende um boneco único feito especialmente para você.", price: 89.90, image: "Imagens/IMG_0913.PNG" },
-                    { id: 102, title: "Casais Personalizados", description: "Bonecos feitos sob medida para presentear casais.", price: 149.90, image: "Imagens/IMG_0921.PNG" },
-                    { id: 103, title: "Bonecos de Bebês", description: "Replique seu bebê em uma versão fofa de crochê.", price: 119.90, image: "Imagens/IMG_0909.PNG" }
+                    { id: 101, title: "Boneco Personalizado", description: "Encomende um boneco único feito especialmente para você.", price: 89.90, image: "css/Imagens/IMG_0913.PNG" },
+                    { id: 102, title: "Casais Personalizados", description: "Bonecos feitos sob medida para presentear casais.", price: 149.90, image: "css/Imagens/IMG_0921.PNG" },
+                    { id: 103, title: "Bonecos de Bebês", description: "Replique seu bebê em uma versão fofa de crochê.", price: 119.90, image: "css/Imagens/IMG_0909.PNG" }
                 ],
                 collections: [
-                    { id: 201, title: "Coleção Inverno", description: "Bonecos e acessórios com tema de inverno.", image: "Imagens/IMG_0913.PNG" },
-                    { id: 202, title: "Coleção Personagens", description: "Seus personagens favoritos em versão crochê.", image: "Imagens/IMG_0921.PNG" },
-                    { id: 203, title: "Coleção Animais", description: "Diversos animais fofos feitos com crochê.", image: "Imagens/IMG_0909.PNG" }
+                    { id: 201, title: "Coleção Inverno", description: "Bonecos e acessórios com tema de inverno.", image: "css/Imagens/IMG_0913.PNG" },
+                    { id: 202, title: "Coleção Personagens", description: "Seus personagens favoritos em versão crochê.", image: "css/Imagens/IMG_0921.PNG" },
+                    { id: 203, title: "Coleção Animais", description: "Diversos animais fofos feitos com crochê.", image: "css/Imagens/IMG_0909.PNG" }
                 ]
             };
 
@@ -370,38 +383,28 @@
             }
 
             function updateTrail() {
-                // Adiciona posição atual do mouse no início do array
                 trailPositions.unshift({ x: mouseX, y: mouseY, age: 0 });
-                
-                // Limita o tamanho do rastro (30 partículas)
                 if (trailPositions.length > 30) {
                     trailPositions.pop();
                 }
-                
-                // Incrementa a idade de cada partícula
                 trailPositions.forEach(p => p.age++);
-                
-                // Desenha o rastro
                 trailCtx.clearRect(0, 0, trailWidth, trailHeight);
                 trailPositions.forEach((p, index) => {
-                    const opacity = Math.max(0, 1 - p.age / 30); // diminui com o tempo
-                    const size = 8 * (1 - p.age / 30); // diminui de tamanho
+                    const opacity = Math.max(0, 1 - p.age / 30);
+                    const size = 8 * (1 - p.age / 30);
                     trailCtx.beginPath();
                     trailCtx.arc(p.x, p.y, size, 0, Math.PI * 2);
-                    trailCtx.fillStyle = `rgba(217, 127, 119, ${opacity * 0.4})`; // cor do destaque com transparência
+                    trailCtx.fillStyle = `rgba(217, 127, 119, ${opacity * 0.4})`;
                     trailCtx.fill();
                 });
-                
                 requestAnimationFrame(updateTrail);
             }
 
-            // Evento para capturar a posição do mouse
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
             });
 
-            // Inicializa o canvas do rastro quando a janela carregar
             window.addEventListener('load', () => {
                 initTrailCanvas();
                 updateTrail();
