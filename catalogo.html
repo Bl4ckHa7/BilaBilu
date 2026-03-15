@@ -11,6 +11,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style2.css">
+    <style>
+        /* Ajuste para compensar o menu fixo na rolagem */
+        html {
+            scroll-padding-top: 70px; /* altura aproximada do nav + um respiro */
+        }
+        /* Caso prefira uma abordagem mais precisa, o JavaScript também fará o ajuste */
+    </style>
 </head>
 <body>
     <!-- Partículas de fundo (canvas) -->
@@ -39,75 +46,43 @@
         </div>
         <div class="header-content">
             <img src="css/Imagens/Logo BilaBilu.png" alt="BilaBilu">
-            <p>Receitas exclusivas e amigurumis personalizados feitos com amor</p>
+            <p>✨ Uma peça artesanal única, feita ponto a ponto com muito amor.</p>
         </div>
     </header>
 
-    <!-- Navegação corrigida -->
+    <!-- Navegação atualizada com três botões -->
     <nav>
         <ul>
-            <li><a href="#receitas">Santinhas</a></li>
-            <li><a href="#bonecos">Bonecos</a></li>
-            <li><a href="#colecoes">Personagens</a></li>
-            <li><a href="#sobre">Sobre</a></li>
-            <li><a href="#contato">Contato</a></li>
+            <li><a href="#cantinho-fe">Cantinho da fé</a></li>
+            <li><a href="#cantinho-bebe">Cantinho do bebê</a></li>
+            <li><a href="#personagens">Personagens de crochê</a></li>
         </ul>
     </nav>
 
     <div class="container">
-
-        <!-- Receitas (Santinhas) -->
-        <section id="receitas">
-            <h2 class="section-title">Santinhas</h2>
-            <div class="products" id="recipes-container"></div>
+        <!-- Cantinho da fé -->
+        <section id="cantinho-fe">
+            <h2 class="section-title">Cantinho da fé</h2>
+            <div class="products" id="fe-container"></div>
         </section>
 
-        <!-- Bonecos e Carrossel -->
-        <section id="bonecos">
-            <h2 class="section-title">Bonecos Personalizados</h2>
-
-            <div class="carousel">
-                <div class="carousel-inner" id="dolls-carousel">
-                    <div class="carousel-item">
-                        <img src="css/Imagens/Mãezinhadocéu.jpeg" alt="Bonecos de crochê">
-                        <div class="carousel-caption">
-                            <h3>Bonecos Personalizados</h3>
-                            <p>Criados especialmente para você</p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="css/Imagens/WhatsApp Image 2026-03-08 at 18.11.45.jpeg" alt="Bonecos de casal">
-                        <div class="carousel-caption">
-                            <h3>Casais Personalizados</h3>
-                            <p>Presentes únicos para ocasiões especiais</p>
-                        </div>
-                    </div>
-                    <div class="carousel-item">
-                        <img src="css/Imagens/WhatsApp Image 2026-03-08 at 18.16.38.jpeg" alt="Bonecos de bebê">
-                        <div class="carousel-caption">
-                            <h3>Bonecos de Bebê</h3>
-                            <p>Recordações fofas do seu pequeno</p>
-                        </div>
-                    </div>
-                </div>
-                <button class="carousel-control prev">&#10094;</button>
-                <button class="carousel-control next">&#10095;</button>
-            </div>
-
-            <div class="products" id="dolls-container"></div>
+        <!-- Cantinho do bebê -->
+        <section id="cantinho-bebe">
+            <h2 class="section-title">Cantinho do bebê</h2>
+            <div class="products" id="bebe-container"></div>
         </section>
     </div>
 
-    <!-- Coleções (fundo diferenciado) -->
-    <section class="collections" id="colecoes">
+    <!-- Personagens de crochê (com fundo diferenciado, igual à antiga coleções) -->
+    <section class="collections" id="personagens">
         <div class="container">
-            <h2 class="section-title">Nossas Coleções</h2>
-            <div class="products" id="collections-container"></div>
+            <h2 class="section-title">Personagens em crochê</h2>
+            <div class="products" id="personagens-container"></div>
         </div>
     </section>
 
     <div class="container">
-        <!-- Sobre -->
+        <!-- Sobre (mantido) -->
         <section id="sobre">
             <h2 class="section-title">Sobre Nós</h2>
             <p>Somos artesãos apaixonados por crochê, criando peças únicas e especiais desde 2010. Nossa missão é espalhar o amor pelo artesanato através de receitas detalhadas e bonecos personalizados que carregam histórias e significados especiais.</p>
@@ -118,7 +93,7 @@
             </div>
         </section>
 
-        <!-- Contato -->
+        <!-- Contato (mantido) -->
         <section id="contato">
             <h2 class="section-title">Contato</h2>
             <form id="contact-form" style="max-width: 500px; margin: 0 auto;">
@@ -214,52 +189,58 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
 
-            // ===== CARROSSEL =====
-            const carouselInner = document.querySelector('.carousel-inner');
-            const items = document.querySelectorAll('.carousel-item');
-            const prevBtn = document.querySelector('.prev');
-            const nextBtn = document.querySelector('.next');
-            let currentIndex = 0;
-
-            function updateCarousel() {
-                carouselInner.style.transform = `translateX(-${currentIndex * 100}%)`;
+            // ===== ROLAGEM SUAVE COM OFFSET PARA OS LINKS DO MENU =====
+            const navLinks = document.querySelectorAll('nav a');
+            const nav = document.querySelector('nav');
+            if (navLinks.length && nav) {
+                navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault(); // Impede o comportamento padrão de pular instantaneamente
+                        const targetId = link.getAttribute('href'); // ex: #cantinho-fe
+                        const targetElement = document.querySelector(targetId);
+                        if (targetElement) {
+                            const navHeight = nav.offsetHeight; // altura atual do menu fixo
+                            const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navHeight - 10; // 10px extra de espaçamento
+                            window.scrollTo({
+                                top: targetPosition,
+                                behavior: 'smooth'
+                            });
+                            // Opcional: atualizar a URL com o hash (sem rolagem instantânea)
+                            history.pushState(null, null, targetId);
+                        }
+                    });
+                });
             }
-            prevBtn.addEventListener('click', () => {
-                currentIndex = (currentIndex - 1 + items.length) % items.length;
-                updateCarousel();
-            });
-            nextBtn.addEventListener('click', () => {
-                currentIndex = (currentIndex + 1) % items.length;
-                updateCarousel();
-            });
-            setInterval(() => {
-                currentIndex = (currentIndex + 1) % items.length;
-                updateCarousel();
-            }, 6000);
 
-            // ===== DADOS DOS PRODUTOS (com caminhos corrigidos) =====
+            // ===== DADOS DOS PRODUTOS ATUALIZADOS =====
             const productsData = {
-                recipes: [
-                    { id: 0, title: "Mãezinha do Céu", description: "Feito em crochê fio 100% algodão tamanho 25cm. (base até a coroa)", price: 240, image: "css/Imagens/Mãezinhadocéu.jpeg" },
-                    { id: 1, title: "Mãezinha do Céu", description: "Feito em crochê fio 100% algodão tamanho 25cm. (base até a coroa)", price: 240, image: "css/Imagens/Mãezinhadocéu2.jpeg" },
-                    { id: 2, title: "Nossa Senhora Aparecida", description: "Feito em crochê fio 100% algodão tamanho 25cm. (base até a coroa)", price: 240, image: "css/Imagens/Nossasenhora.jpeg" },
-                    { id: 3, title: "Nossa Senhora Aparecida", description: "Feito em crochê fio 100% algodão tamanho 23cm. (base até a coroa)", price: 220, image: "css/Imagens/Nossasenhora(23).jpeg" },
-                    { id: 4, title: "Nossa Senhora Aparecida", description: "Feito em crochê fio 100% algodão tamanho 35cm. (base até a coroa)", price: 320, image: "css/Imagens/Nossasenhora2.jpeg" },
-                    { id: 5, title: "Nossa Senhora Aparecida (manto com flores)", description: "Feito em crochê fio 100% algodão tamanho 35cm. (base até a coroa)", price: 320, image: "css/Imagens/Nossasenhora3.jpeg" }
+                fe: [
+                    { id: 1, title: "Santinhas", description: "Linda santinha feita em crochê com fio 100% algodão. Tamanho 25cm.", price: 240, image: "css/Imagens/Mãezinhadocéu.jpeg" },
+                    { id: 2, title: "Anjinhos", description: "Anjo protetor em crochê, perfeito para presentear. 20cm de altura.", price: 180, image: "css/Imagens/IMG_0913.PNG" },
+                    { id: 3, title: "Terços", description: "Terço de crochê com contas e crucifixo artesanal. 50cm.", price: 90, image: "css/Imagens/IMG_0921.PNG" },
+                    { id: 4, title: "Presépio", description: "Conjunto completo do presépio em crochê (Menino Jesus, Maria, José, animais).", price: 580, image: "css/Imagens/IMG_0909.PNG" },
+                    { id: 5, title: "Sagrada Família", description: "Representação da Sagrada Família em crochê. 30cm cada peça.", price: 450, image: "css/Imagens/Nossasenhora.jpeg" },
+                    { id: 6, title: "Jesus", description: "Imagem de Jesus em crochê, 25cm de altura.", price: 220, image: "css/Imagens/Nossasenhora2.jpeg" }
                 ],
-                dolls: [
-                    { id: 101, title: "Boneco Personalizado", description: "Encomende um boneco único feito especialmente para você.", price: 89.90, image: "css/Imagens/IMG_0913.PNG" },
-                    { id: 102, title: "Casais Personalizados", description: "Bonecos feitos sob medida para presentear casais.", price: 149.90, image: "css/Imagens/IMG_0921.PNG" },
-                    { id: 103, title: "Bonecos de Bebês", description: "Replique seu bebê em uma versão fofa de crochê.", price: 119.90, image: "css/Imagens/IMG_0909.PNG" }
+                bebe: [
+                    { id: 101, title: "Móbile", description: "Móbile de crochê com bichinhos para berço. Estimula os sentidos do bebê.", price: 150, image: "css/Imagens/IMG_0913.PNG" },
+                    { id: 102, title: "Porta maternidade", description: "Porta maternidade personalizado com nome e data, feito em crochê.", price: 120, image: "css/Imagens/IMG_0921.PNG" },
+                    { id: 103, title: "Naninha", description: "Naninha macia de crochê com cabeça de ursinho. 30x30cm.", price: 85, image: "css/Imagens/IMG_0909.PNG" },
+                    { id: 104, title: "Fofuras", description: "Conjunto de fofuras: sapatinho, luvinha e gorro em crochê.", price: 110, image: "css/Imagens/IMG_0913.PNG" },
+                    { id: 105, title: "Zoo safaria", description: "Bichinhos de crochê temáticos de safári: leão, girafa, elefante. 15cm.", price: 95, image: "css/Imagens/IMG_0921.PNG" },
+                    { id: 106, title: "Chocalho", description: "Chocalho de crochê em formato de flor, seguro e colorido.", price: 45, image: "css/Imagens/IMG_0909.PNG" }
                 ],
-                collections: [
-                    { id: 201, title: "Coleção Inverno", description: "Bonecos e acessórios com tema de inverno.", image: "css/Imagens/IMG_0913.PNG" },
-                    { id: 202, title: "Coleção Personagens", description: "Seus personagens favoritos em versão crochê.", image: "css/Imagens/IMG_0921.PNG" },
-                    { id: 203, title: "Coleção Animais", description: "Diversos animais fofos feitos com crochê.", image: "css/Imagens/IMG_0909.PNG" }
+                personagens: [
+                    { id: 201, title: "Personagens", description: "Seu personagem favorito feito em crochê sob encomenda.", price: 140, image: "css/Imagens/IMG_0913.PNG" },
+                    { id: 202, title: "Turma moranguinho", description: "Moranguinho e suas amigas em versão crochê.", price: 130, image: "css/Imagens/IMG_0921.PNG" },
+                    { id: 203, title: "Turma chaves", description: "Chaves, Chiquinha e Kiko em crochê. Tamanho 20cm.", price: 150, image: "css/Imagens/IMG_0909.PNG" },
+                    { id: 204, title: "Turma lilo", description: "Lilo & Stitch em crochê, réplica fiel e cheia de detalhes.", price: 160, image: "css/Imagens/IMG_0913.PNG" },
+                    { id: 205, title: "Bonecas", description: "Bonecas de crochê com roupinhas removíveis. 30cm.", price: 180, image: "css/Imagens/IMG_0921.PNG" },
+                    { id: 206, title: "Bonecos", description: "Bonecos diversos em crochê, prontos para brincar ou decorar.", price: 120, image: "css/Imagens/IMG_0909.PNG" }
                 ]
             };
 
-            function renderProducts(containerId, items, type) {
+            function renderProducts(containerId, items) {
                 const container = document.getElementById(containerId);
                 container.innerHTML = '';
                 items.forEach(item => {
@@ -270,17 +251,17 @@
                         <div class="product-info">
                             <h3>${item.title}</h3>
                             <p>${item.description}</p>
-                            ${item.price ? `<span class="price">R$ ${item.price.toFixed(2)}</span>` : ''}
-                            <button class="btn view-product" data-id="${item.id}" data-type="${type}">Ver Detalhes</button>
+                            <span class="price">R$ ${item.price.toFixed(2)}</span>
+                            <button class="btn view-product" data-id="${item.id}" data-type="${containerId}">Ver Detalhes</button>
                         </div>
                     `;
                     container.appendChild(card);
                 });
             }
 
-            renderProducts('recipes-container', productsData.recipes, 'recipe');
-            renderProducts('dolls-container', productsData.dolls, 'doll');
-            renderProducts('collections-container', productsData.collections, 'collection');
+            renderProducts('fe-container', productsData.fe);
+            renderProducts('bebe-container', productsData.bebe);
+            renderProducts('personagens-container', productsData.personagens);
 
             // ===== MODAL =====
             const modal = document.getElementById('product-modal');
@@ -290,11 +271,11 @@
             document.addEventListener('click', (e) => {
                 if (e.target.classList.contains('view-product')) {
                     const id = parseInt(e.target.dataset.id);
-                    const type = e.target.dataset.type;
+                    const type = e.target.dataset.type; // 'fe-container', 'bebe-container', 'personagens-container'
                     let product;
-                    if (type === 'recipe') product = productsData.recipes.find(p => p.id === id);
-                    else if (type === 'doll') product = productsData.dolls.find(p => p.id === id);
-                    else product = productsData.collections.find(p => p.id === id);
+                    if (type === 'fe-container') product = productsData.fe.find(p => p.id === id);
+                    else if (type === 'bebe-container') product = productsData.bebe.find(p => p.id === id);
+                    else if (type === 'personagens-container') product = productsData.personagens.find(p => p.id === id);
 
                     if (product) {
                         modalContent.innerHTML = `
@@ -303,7 +284,7 @@
                                 <img src="${product.image}" style="flex:1; min-width:200px; max-width:100%; border-radius:15px;">
                                 <div style="flex:2;">
                                     <p>${product.description}</p>
-                                    ${product.price ? `<p class="price">R$ ${product.price.toFixed(2)}</p>` : ''}
+                                    <p class="price">R$ ${product.price.toFixed(2)}</p>
                                     <button class="btn">Adicionar ao Carrinho</button>
                                 </div>
                             </div>
