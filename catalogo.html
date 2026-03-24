@@ -4,31 +4,424 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Bila Bilu · Arte em Crochê</title>
-    <!-- Font Awesome (ícones) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style2.css">
     <style>
-        /* Ajuste para compensar o menu fixo na rolagem */
-        html {
-            scroll-padding-top: 70px; /* altura aproximada do nav + um respiro */
+        html { scroll-padding-top: 70px; }
+
+        /* ===== BOTÃO FLUTUANTE DO CARRINHO ===== */
+        .cart-float-btn {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 64px;
+            height: 64px;
+            background: var(--destaque);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 500;
+            box-shadow: 0 10px 28px rgba(217, 127, 119, 0.6);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        /* Caso prefira uma abordagem mais precisa, o JavaScript também fará o ajuste */
+        .cart-float-btn:hover {
+            background: var(--medio);
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 18px 35px rgba(191, 130, 117, 0.7);
+        }
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #2c1e1a;
+            color: white;
+            font-size: 0.72rem;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .cart-badge.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* ===== OVERLAY ===== */
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(44, 30, 26, 0.45);
+            z-index: 900;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.35s ease;
+            backdrop-filter: blur(3px);
+        }
+        .cart-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== PAINEL LATERAL DO CARRINHO ===== */
+        .cart-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 420px;
+            max-width: 100vw;
+            height: 100%;
+            background: #fff9f7;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -20px 0 60px rgba(191, 130, 117, 0.25);
+        }
+        .cart-panel.open {
+            transform: translateX(0);
+        }
+
+        /* Cabeçalho do painel */
+        .cart-header {
+            background: linear-gradient(135deg, #b55a4a, #e6938a);
+            color: white;
+            padding: 1.4rem 1.6rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+        .cart-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .cart-close-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .cart-close-btn:hover { background: rgba(255,255,255,0.35); }
+
+        /* Lista de itens */
+        .cart-items-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        .cart-items-list::-webkit-scrollbar { width: 5px; }
+        .cart-items-list::-webkit-scrollbar-track { background: transparent; }
+        .cart-items-list::-webkit-scrollbar-thumb { background: var(--pastel-1); border-radius: 10px; }
+
+        /* Estado vazio */
+        .cart-empty {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #b8948e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .cart-empty i { font-size: 3.5rem; opacity: 0.4; }
+        .cart-empty p { font-size: 1rem; }
+
+        /* Item do carrinho */
+        .cart-item {
+            background: white;
+            border-radius: 18px;
+            padding: 0.9rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            box-shadow: 0 4px 14px rgba(191, 130, 117, 0.12);
+            border: 1px solid #f9ede9;
+            animation: itemSlideIn 0.3s ease;
+        }
+        @keyframes itemSlideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .cart-item-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            flex-shrink: 0;
+            background: var(--pastel-2);
+        }
+        .cart-item-img-placeholder {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--pastel-1), var(--pastel-2));
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .cart-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .cart-item-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--texto);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cart-item-price {
+            font-size: 0.85rem;
+            color: var(--destaque);
+            font-weight: 600;
+            margin-top: 2px;
+        }
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 6px;
+        }
+        .qty-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 1.5px solid var(--pastel-1);
+            background: white;
+            color: var(--medio);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            line-height: 1;
+        }
+        .qty-btn:hover {
+            background: var(--destaque);
+            color: white;
+            border-color: var(--destaque);
+        }
+        .qty-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+            color: var(--texto);
+        }
+        .cart-item-remove {
+            background: none;
+            border: none;
+            color: #c9a09b;
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .cart-item-remove:hover { color: #c0392b; background: #fdecea; }
+
+        /* Rodapé do carrinho */
+        .cart-footer {
+            padding: 1.2rem 1.4rem 1.6rem;
+            background: white;
+            border-top: 1px solid #f2e0db;
+            flex-shrink: 0;
+        }
+        .cart-summary {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            margin-bottom: 1rem;
+        }
+        .cart-summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #8c6b66;
+        }
+        .cart-summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--texto);
+            border-top: 1.5px dashed #f2d1c9;
+            padding-top: 0.7rem;
+            margin-top: 0.4rem;
+        }
+        .cart-summary-total span:last-child { color: var(--destaque); }
+
+        /* Botão de finalizar via WhatsApp */
+        .btn-whatsapp {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 1rem;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.35);
+        }
+        .btn-whatsapp:hover {
+            background: #1ebe5d;
+            transform: translateY(-3px);
+            box-shadow: 0 16px 30px rgba(37, 211, 102, 0.5);
+        }
+        .btn-whatsapp:active { transform: translateY(0); }
+        .btn-whatsapp i { font-size: 1.2rem; }
+
+        /* Botão limpar carrinho */
+        .btn-clear-cart {
+            width: 100%;
+            padding: 0.6rem;
+            background: none;
+            border: 1.5px solid #f2d1c9;
+            border-radius: 50px;
+            color: #b8948e;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 0.6rem;
+            transition: all 0.2s;
+        }
+        .btn-clear-cart:hover {
+            border-color: #e07b75;
+            color: #e07b75;
+            background: #fef8f7;
+        }
+
+        /* Botão "Adicionar ao Carrinho" nos cards */
+        .btn-add-cart {
+            background: white;
+            color: var(--medio);
+            border: 2px solid var(--pastel-1);
+            padding: 0.65rem 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .btn-add-cart:hover {
+            background: var(--medio);
+            color: white;
+            border-color: var(--medio);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px var(--sombra-media);
+        }
+        .btn-add-cart.added {
+            background: #d4edda;
+            color: #155724;
+            border-color: #c3e6cb;
+        }
+
+        /* Botões lado a lado no card */
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        /* Toast de confirmação */
+        .toast {
+            position: fixed;
+            bottom: 180px;
+            right: 30px;
+            background: #2c1e1a;
+            color: white;
+            padding: 0.8rem 1.4rem;
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            z-index: 1200;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .toast i { color: #a8e6bc; }
+
+        /* Modal — botão adicionar ao carrinho */
+        .modal-actions {
+            display: flex;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 480px) {
+            .cart-panel { width: 100vw; }
+            .cart-float-btn { bottom: 90px; right: 20px; }
+        }
     </style>
 </head>
 <body>
-    <!-- Partículas de fundo (canvas) -->
     <canvas id="particles-canvas"></canvas>
 
-    <!-- Loader -->
-    <div class="loader" id="loader">
-        <div class="spinner"></div>
-    </div>
+    <div class="loader" id="loader"><div class="spinner"></div></div>
 
-    <!-- Header com borboletas flutuantes -->
+    <!-- Header -->
     <header>
         <div class="butterflies">
             <span class="butterfly" style="top:5%; left:2%; animation-delay:0s; font-size:2.2rem;">🦋</span>
@@ -50,7 +443,7 @@
         </div>
     </header>
 
-    <!-- Navegação atualizada com três botões -->
+    <!-- Navegação -->
     <nav>
         <ul>
             <li><a href="#cantinho-fe">Cantinho da fé</a></li>
@@ -60,20 +453,16 @@
     </nav>
 
     <div class="container">
-        <!-- Cantinho da fé -->
         <section id="cantinho-fe">
             <h2 class="section-title">Cantinho da fé</h2>
             <div class="products" id="fe-container"></div>
         </section>
-
-        <!-- Cantinho do bebê -->
         <section id="cantinho-bebe">
             <h2 class="section-title">Cantinho do bebê</h2>
             <div class="products" id="bebe-container"></div>
         </section>
     </div>
 
-    <!-- Personagens de crochê (com fundo diferenciado, igual à antiga coleções) -->
     <section class="collections" id="personagens">
         <div class="container">
             <h2 class="section-title">Personagens em crochê</h2>
@@ -82,7 +471,6 @@
     </section>
 
     <div class="container">
-        <!-- Sobre (mantido) -->
         <section id="sobre">
             <h2 class="section-title">Sobre Nós</h2>
             <p>Somos artesãos apaixonados por crochê, criando peças únicas e especiais desde 2010. Nossa missão é espalhar o amor pelo artesanato através de receitas detalhadas e bonecos personalizados que carregam histórias e significados especiais.</p>
@@ -91,27 +479,6 @@
                 <p>Trabalhamos com materiais de alta qualidade e cada peça é feita com atenção aos detalhes. Nossas receitas são testadas e aprovadas por diversas artesãs antes de serem disponibilizadas para venda.</p>
                 <p>Além de vender receitas e bonecos prontos, oferecemos workshops online para quem quer aprender ou aprimorar suas técnicas de crochê.</p>
             </div>
-        </section>
-
-        <!-- Contato (mantido) -->
-        <section id="contato">
-            <h2 class="section-title">Contato</h2>
-            <form id="contact-form" style="max-width: 500px; margin: 0 auto;">
-                <div style="margin-bottom: 15px;">
-                    <label for="name">Nome:</label>
-                    <input type="text" id="name" required>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" required>
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label for="message">Mensagem:</label>
-                    <textarea id="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn">Enviar Mensagem</button>
-            </form>
-            <div id="form-success" style="display: none;"></div>
         </section>
     </div>
 
@@ -126,8 +493,37 @@
         </div>
     </footer>
 
-    <!-- Botão back to top -->
+    <!-- Back to top -->
     <div class="back-to-top" id="back-to-top" title="Voltar ao topo">↑</div>
+
+    <!-- Botão flutuante do carrinho -->
+    <button class="cart-float-btn" id="cart-float-btn" title="Ver carrinho">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-badge" id="cart-badge">0</span>
+    </button>
+
+    <!-- Overlay -->
+    <div class="cart-overlay" id="cart-overlay"></div>
+
+    <!-- Painel lateral do carrinho -->
+    <div class="cart-panel" id="cart-panel">
+        <div class="cart-header">
+            <h2><i class="fas fa-shopping-bag"></i> Meu Carrinho</h2>
+            <button class="cart-close-btn" id="cart-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items-list" id="cart-items-list">
+            <!-- itens injetados via JS -->
+        </div>
+        <div class="cart-footer" id="cart-footer">
+            <div class="cart-summary" id="cart-summary"></div>
+            <a href="#" class="btn-whatsapp" id="btn-whatsapp" target="_blank">
+                <i class="fab fa-whatsapp"></i> Finalizar Pedido via WhatsApp
+            </a>
+            <button class="btn-clear-cart" id="btn-clear-cart">
+                <i class="fas fa-trash-alt"></i> Limpar carrinho
+            </button>
+        </div>
+    </div>
 
     <!-- Modal de produto -->
     <div class="modal" id="product-modal">
@@ -137,289 +533,427 @@
         </div>
     </div>
 
+    <!-- Toast de confirmação -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-msg">Adicionado ao carrinho!</span>
+    </div>
 
+    <!-- Firebase -->
     <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-        apiKey: "AIzaSyDWvt0DRBNpDmxq-hsz9DBmykkT_yvSybs",
-        authDomain: "bilabilu-81f61.firebaseapp.com",
-        projectId: "bilabilu-81f61",
-        storageBucket: "bilabilu-81f61.firebasestorage.app",
-        messagingSenderId: "558916105751",
-        appId: "1:558916105751:web:20f5901cae8bea77d44e52",
-        measurementId: "G-T3665L6619"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-analytics.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyDWvt0DRBNpDmxq-hsz9DBmykkT_yvSybs",
+            authDomain: "bilabilu-81f61.firebaseapp.com",
+            projectId: "bilabilu-81f61",
+            storageBucket: "bilabilu-81f61.firebasestorage.app",
+            messagingSenderId: "558916105751",
+            appId: "1:558916105751:web:20f5901cae8bea77d44e52",
+            measurementId: "G-T3665L6619"
+        };
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
     </script>
 
     <script>
-        (function() {
-            // ===== LOADER =====
-            window.addEventListener('load', function() {
-                document.getElementById('loader').classList.add('hidden');
-                setTimeout(() => {
-                    document.getElementById('loader').style.display = 'none';
-                }, 600);
-            });
+    (function() {
+        // ============================================================
+        //  ⚙️  CONFIGURAÇÃO — altere o número do WhatsApp aqui
+        // ============================================================
+        const WHATSAPP_NUMBER = '5511992549400'; // ← troque pelo número real (com DDI+DDD, sem espaços ou traços)
+        // ============================================================
 
-            // ===== ANO ATUAL =====
-            document.getElementById('current-year').textContent = new Date().getFullYear();
+        // ===== DADOS DOS PRODUTOS =====
+        const productsData = {
+            fe: [
+                { id: 1,   title: "Santinhas",       description: "Linda santinha feita em crochê com fio 100% algodão. Tamanho 25cm.",                              price: 240, image: "css/Imagens/Mãezinhadocéu.jpeg" },
+                { id: 2,   title: "Anjinhos",         description: "Anjo protetor em crochê, perfeito para presentear. 20cm de altura.",                              price: 180, image: "css/Imagens/IMG_0913.PNG" },
+                { id: 3,   title: "Terços",           description: "Terço de crochê com contas e crucifixo artesanal. 50cm.",                                        price: 90,  image: "css/Imagens/IMG_0921.PNG" },
+                { id: 4,   title: "Presépio",         description: "Conjunto completo do presépio em crochê (Menino Jesus, Maria, José, animais).",                  price: 580, image: "css/Imagens/IMG_0909.PNG" },
+                { id: 5,   title: "Sagrada Família",  description: "Representação da Sagrada Família em crochê. 30cm cada peça.",                                    price: 450, image: "css/Imagens/Nossasenhora.jpeg" },
+                { id: 6,   title: "Jesus",            description: "Imagem de Jesus em crochê, 25cm de altura.",                                                     price: 220, image: "css/Imagens/Nossasenhora2.jpeg" }
+            ],
+            bebe: [
+                { id: 101, title: "Móbile",           description: "Móbile de crochê com bichinhos para berço. Estimula os sentidos do bebê.",                       price: 150, image: "css/Imagens/IMG_0913.PNG" },
+                { id: 102, title: "Porta maternidade",description: "Porta maternidade personalizado com nome e data, feito em crochê.",                              price: 120, image: "css/Imagens/IMG_0921.PNG" },
+                { id: 103, title: "Naninha",          description: "Naninha macia de crochê com cabeça de ursinho. 30x30cm.",                                        price: 85,  image: "css/Imagens/IMG_0909.PNG" },
+                { id: 104, title: "Fofuras",          description: "Conjunto de fofuras: sapatinho, luvinha e gorro em crochê.",                                     price: 110, image: "css/Imagens/IMG_0913.PNG" },
+                { id: 105, title: "Zoo safari",       description: "Bichinhos de crochê temáticos de safári: leão, girafa, elefante. 15cm.",                         price: 95,  image: "css/Imagens/IMG_0921.PNG" },
+                { id: 106, title: "Chocalho",         description: "Chocalho de crochê em formato de flor, seguro e colorido.",                                      price: 45,  image: "css/Imagens/IMG_0909.PNG" }
+            ],
+            personagens: [
+                { id: 201, title: "Personagens",      description: "Seu personagem favorito feito em crochê sob encomenda.",                                         price: 140, image: "css/Imagens/IMG_0913.PNG" },
+                { id: 202, title: "Turma moranguinho",description: "Moranguinho e suas amigas em versão crochê.",                                                    price: 130, image: "css/Imagens/IMG_0921.PNG" },
+                { id: 203, title: "Turma chaves",     description: "Chaves, Chiquinha e Kiko em crochê. Tamanho 20cm.",                                              price: 150, image: "css/Imagens/IMG_0909.PNG" },
+                { id: 204, title: "Turma lilo",       description: "Lilo & Stitch em crochê, réplica fiel e cheia de detalhes.",                                     price: 160, image: "css/Imagens/IMG_0913.PNG" },
+                { id: 205, title: "Bonecas",          description: "Bonecas de crochê com roupinhas removíveis. 30cm.",                                              price: 180, image: "css/Imagens/IMG_0921.PNG" },
+                { id: 206, title: "Bonecos",          description: "Bonecos diversos em crochê, prontos para brincar ou decorar.",                                   price: 120, image: "css/Imagens/IMG_0909.PNG" }
+            ]
+        };
 
-            // ===== BOTÃO MOSTAR MAIS =====
-            const showMoreBtn = document.getElementById('show-more-btn');
-            const moreContent = document.getElementById('more-content');
-            showMoreBtn.addEventListener('click', () => {
-                if (moreContent.style.display === 'none') {
-                    moreContent.style.display = 'block';
-                    showMoreBtn.textContent = 'Mostrar Menos';
-                } else {
-                    moreContent.style.display = 'none';
-                    showMoreBtn.textContent = 'Mostrar Mais';
-                }
-            });
+        // Mapa global de id → produto
+        const allProducts = {};
+        [...productsData.fe, ...productsData.bebe, ...productsData.personagens]
+            .forEach(p => allProducts[p.id] = p);
 
-            // ===== FORMULÁRIO DE CONTATO =====
-            const contactForm = document.getElementById('contact-form');
-            const formSuccess = document.getElementById('form-success');
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                formSuccess.style.display = 'block';
-                formSuccess.textContent = 'Mensagem enviada com sucesso! Entraremos em contato em breve.';
-                contactForm.reset();
-                setTimeout(() => {
-                    formSuccess.style.display = 'none';
-                }, 4000);
-            });
+        // ===== ESTADO DO CARRINHO =====
+        let cart = []; // [{ id, qty }]
 
-            // ===== BACK TO TOP =====
-            const backToTop = document.getElementById('back-to-top');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) {
-                    backToTop.classList.add('active');
-                } else {
-                    backToTop.classList.remove('active');
-                }
-            });
-            backToTop.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+        // ===== UTILIDADES =====
+        function formatBRL(value) {
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
 
-            // ===== ROLAGEM SUAVE COM OFFSET PARA OS LINKS DO MENU =====
-            const navLinks = document.querySelectorAll('nav a');
-            const nav = document.querySelector('nav');
-            if (navLinks.length && nav) {
-                navLinks.forEach(link => {
-                    link.addEventListener('click', (e) => {
-                        e.preventDefault(); // Impede o comportamento padrão de pular instantaneamente
-                        const targetId = link.getAttribute('href'); // ex: #cantinho-fe
-                        const targetElement = document.querySelector(targetId);
-                        if (targetElement) {
-                            const navHeight = nav.offsetHeight; // altura atual do menu fixo
-                            const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navHeight - 10; // 10px extra de espaçamento
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            });
-                            // Opcional: atualizar a URL com o hash (sem rolagem instantânea)
-                            history.pushState(null, null, targetId);
-                        }
-                    });
-                });
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // ===== CARRINHO — LÓGICA =====
+        function getCartTotal() {
+            return cart.reduce((acc, item) => acc + allProducts[item.id].price * item.qty, 0);
+        }
+        function getCartCount() {
+            return cart.reduce((acc, item) => acc + item.qty, 0);
+        }
+
+        function addToCart(productId) {
+            const existing = cart.find(i => i.id === productId);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ id: productId, qty: 1 });
+            }
+            renderCart();
+            updateBadge();
+            showToast(`"${allProducts[productId].title}" adicionado! 🛒`);
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(i => i.id !== productId);
+            renderCart();
+            updateBadge();
+        }
+
+        function changeQty(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) removeFromCart(productId);
+            else { renderCart(); updateBadge(); }
+        }
+
+        function clearCart() {
+            cart = [];
+            renderCart();
+            updateBadge();
+        }
+
+        function updateBadge() {
+            const count = getCartCount();
+            const badge = document.getElementById('cart-badge');
+            badge.textContent = count;
+            badge.classList.toggle('visible', count > 0);
+        }
+
+        function renderCart() {
+            const list = document.getElementById('cart-items-list');
+            const footer = document.getElementById('cart-footer');
+            const summary = document.getElementById('cart-summary');
+
+            list.innerHTML = '';
+
+            if (cart.length === 0) {
+                list.innerHTML = `
+                    <div class="cart-empty">
+                        <i class="fas fa-shopping-bag"></i>
+                        <p>Seu carrinho está vazio.<br>Adicione peças lindas para começar! 🌸</p>
+                    </div>`;
+                footer.style.display = 'none';
+                return;
             }
 
-            // ===== DADOS DOS PRODUTOS ATUALIZADOS =====
-            const productsData = {
-                fe: [
-                    { id: 1, title: "Santinhas", description: "Linda santinha feita em crochê com fio 100% algodão. Tamanho 25cm.", price: 240, image: "css/Imagens/Mãezinhadocéu.jpeg" },
-                    { id: 2, title: "Anjinhos", description: "Anjo protetor em crochê, perfeito para presentear. 20cm de altura.", price: 180, image: "css/Imagens/IMG_0913.PNG" },
-                    { id: 3, title: "Terços", description: "Terço de crochê com contas e crucifixo artesanal. 50cm.", price: 90, image: "css/Imagens/IMG_0921.PNG" },
-                    { id: 4, title: "Presépio", description: "Conjunto completo do presépio em crochê (Menino Jesus, Maria, José, animais).", price: 580, image: "css/Imagens/IMG_0909.PNG" },
-                    { id: 5, title: "Sagrada Família", description: "Representação da Sagrada Família em crochê. 30cm cada peça.", price: 450, image: "css/Imagens/Nossasenhora.jpeg" },
-                    { id: 6, title: "Jesus", description: "Imagem de Jesus em crochê, 25cm de altura.", price: 220, image: "css/Imagens/Nossasenhora2.jpeg" }
-                ],
-                bebe: [
-                    { id: 101, title: "Móbile", description: "Móbile de crochê com bichinhos para berço. Estimula os sentidos do bebê.", price: 150, image: "css/Imagens/IMG_0913.PNG" },
-                    { id: 102, title: "Porta maternidade", description: "Porta maternidade personalizado com nome e data, feito em crochê.", price: 120, image: "css/Imagens/IMG_0921.PNG" },
-                    { id: 103, title: "Naninha", description: "Naninha macia de crochê com cabeça de ursinho. 30x30cm.", price: 85, image: "css/Imagens/IMG_0909.PNG" },
-                    { id: 104, title: "Fofuras", description: "Conjunto de fofuras: sapatinho, luvinha e gorro em crochê.", price: 110, image: "css/Imagens/IMG_0913.PNG" },
-                    { id: 105, title: "Zoo safaria", description: "Bichinhos de crochê temáticos de safári: leão, girafa, elefante. 15cm.", price: 95, image: "css/Imagens/IMG_0921.PNG" },
-                    { id: 106, title: "Chocalho", description: "Chocalho de crochê em formato de flor, seguro e colorido.", price: 45, image: "css/Imagens/IMG_0909.PNG" }
-                ],
-                personagens: [
-                    { id: 201, title: "Personagens", description: "Seu personagem favorito feito em crochê sob encomenda.", price: 140, image: "css/Imagens/IMG_0913.PNG" },
-                    { id: 202, title: "Turma moranguinho", description: "Moranguinho e suas amigas em versão crochê.", price: 130, image: "css/Imagens/IMG_0921.PNG" },
-                    { id: 203, title: "Turma chaves", description: "Chaves, Chiquinha e Kiko em crochê. Tamanho 20cm.", price: 150, image: "css/Imagens/IMG_0909.PNG" },
-                    { id: 204, title: "Turma lilo", description: "Lilo & Stitch em crochê, réplica fiel e cheia de detalhes.", price: 160, image: "css/Imagens/IMG_0913.PNG" },
-                    { id: 205, title: "Bonecas", description: "Bonecas de crochê com roupinhas removíveis. 30cm.", price: 180, image: "css/Imagens/IMG_0921.PNG" },
-                    { id: 206, title: "Bonecos", description: "Bonecos diversos em crochê, prontos para brincar ou decorar.", price: 120, image: "css/Imagens/IMG_0909.PNG" }
-                ]
-            };
+            footer.style.display = 'block';
 
-            function renderProducts(containerId, items) {
-                const container = document.getElementById(containerId);
-                container.innerHTML = '';
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    card.innerHTML = `
-                        <div class="product-image"><img src="${item.image}" alt="${item.title}"></div>
-                        <div class="product-info">
-                            <h3>${item.title}</h3>
-                            <p>${item.description}</p>
-                            <span class="price">R$ ${item.price.toFixed(2)}</span>
-                            <button class="btn view-product" data-id="${item.id}" data-type="${containerId}">Ver Detalhes</button>
+            cart.forEach(item => {
+                const product = allProducts[item.id];
+                const subtotal = product.price * item.qty;
+                const div = document.createElement('div');
+                div.className = 'cart-item';
+                div.innerHTML = `
+                    <div class="cart-item-img-placeholder">🧶</div>
+                    <div class="cart-item-info">
+                        <div class="cart-item-name">${product.title}</div>
+                        <div class="cart-item-price">${formatBRL(subtotal)}</div>
+                        <div class="cart-item-controls">
+                            <button class="qty-btn" data-action="dec" data-id="${product.id}">−</button>
+                            <span class="qty-value">${item.qty}</span>
+                            <button class="qty-btn" data-action="inc" data-id="${product.id}">+</button>
                         </div>
-                    `;
-                    container.appendChild(card);
-                });
+                    </div>
+                    <button class="cart-item-remove" data-remove="${product.id}" title="Remover">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                list.appendChild(div);
+            });
+
+            // Resumo
+            const total = getCartTotal();
+            const count = getCartCount();
+            summary.innerHTML = `
+                <div class="cart-summary-row">
+                    <span>${count} ${count === 1 ? 'item' : 'itens'}</span>
+                    <span>${formatBRL(total)}</span>
+                </div>
+                <div class="cart-summary-total">
+                    <span>Total</span>
+                    <span>${formatBRL(total)}</span>
+                </div>
+            `;
+
+            // Montar link WhatsApp
+            buildWhatsAppLink();
+        }
+
+        function buildWhatsAppLink() {
+            const lines = ['🛒 *MEU PEDIDO – BilaBilu Crochê*', ''];
+            cart.forEach(item => {
+                const p = allProducts[item.id];
+                const subtotal = formatBRL(p.price * item.qty);
+                lines.push(`• ${item.qty}x ${p.title} — ${subtotal}`);
+            });
+            lines.push('');
+            lines.push(`━━━━━━━━━━━━━━`);
+            lines.push(`💰 *Total: ${formatBRL(getCartTotal())}*`);
+            lines.push('');
+            lines.push('Aguardo confirmação e instruções de pagamento! 🌸');
+
+            const msg = encodeURIComponent(lines.join('\n'));
+            document.getElementById('btn-whatsapp').href =
+                `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+        }
+
+        // ===== EVENTOS DO CARRINHO =====
+        document.getElementById('cart-float-btn').addEventListener('click', openCart);
+        document.getElementById('cart-close-btn').addEventListener('click', closeCart);
+        document.getElementById('cart-overlay').addEventListener('click', closeCart);
+        document.getElementById('btn-clear-cart').addEventListener('click', () => {
+            if (confirm('Deseja limpar o carrinho?')) clearCart();
+        });
+
+        document.getElementById('cart-items-list').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-action]');
+            const rem = e.target.closest('[data-remove]');
+            if (btn) {
+                const id = parseInt(btn.dataset.id);
+                btn.dataset.action === 'inc' ? changeQty(id, 1) : changeQty(id, -1);
             }
+            if (rem) removeFromCart(parseInt(rem.dataset.remove));
+        });
 
-            renderProducts('fe-container', productsData.fe);
-            renderProducts('bebe-container', productsData.bebe);
-            renderProducts('personagens-container', productsData.personagens);
+        function openCart() {
+            document.getElementById('cart-panel').classList.add('open');
+            document.getElementById('cart-overlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeCart() {
+            document.getElementById('cart-panel').classList.remove('open');
+            document.getElementById('cart-overlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
 
-            // ===== MODAL =====
-            const modal = document.getElementById('product-modal');
-            const modalContent = document.getElementById('modal-content');
-            const closeModal = document.querySelector('.close-modal');
+        // ===== RENDERIZAR PRODUTOS =====
+        function renderProducts(containerId, items) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-image"><img src="${item.image}" alt="${item.title}" loading="lazy"></div>
+                    <div class="product-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <span class="price">${formatBRL(item.price)}</span>
+                        <div class="product-actions">
+                            <button class="btn view-product" data-id="${item.id}" data-type="${containerId}">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </button>
+                            <button class="btn-add-cart" data-addcart="${item.id}">
+                                <i class="fas fa-shopping-bag"></i> Adicionar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
 
-            document.addEventListener('click', (e) => {
-                if (e.target.classList.contains('view-product')) {
-                    const id = parseInt(e.target.dataset.id);
-                    const type = e.target.dataset.type; // 'fe-container', 'bebe-container', 'personagens-container'
-                    let product;
-                    if (type === 'fe-container') product = productsData.fe.find(p => p.id === id);
-                    else if (type === 'bebe-container') product = productsData.bebe.find(p => p.id === id);
-                    else if (type === 'personagens-container') product = productsData.personagens.find(p => p.id === id);
+        renderProducts('fe-container', productsData.fe);
+        renderProducts('bebe-container', productsData.bebe);
+        renderProducts('personagens-container', productsData.personagens);
 
-                    if (product) {
-                        modalContent.innerHTML = `
-                            <h2>${product.title}</h2>
-                            <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-                                <img src="${product.image}" style="flex:1; min-width:200px; max-width:100%; border-radius:15px;">
-                                <div style="flex:2;">
-                                    <p>${product.description}</p>
-                                    <p class="price">R$ ${product.price.toFixed(2)}</p>
-                                    <button class="btn">Adicionar ao Carrinho</button>
+        // Delegação — botão "Adicionar" nos cards
+        document.addEventListener('click', (e) => {
+            const addBtn = e.target.closest('[data-addcart]');
+            if (addBtn) {
+                addToCart(parseInt(addBtn.dataset.addcart));
+                addBtn.classList.add('added');
+                const orig = addBtn.innerHTML;
+                addBtn.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
+                setTimeout(() => {
+                    addBtn.classList.remove('added');
+                    addBtn.innerHTML = orig;
+                }, 1800);
+            }
+        });
+
+        // ===== MODAL =====
+        const modal = document.getElementById('product-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.querySelector('.close-modal');
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('view-product')) {
+                const id = parseInt(e.target.dataset.id);
+                const product = allProducts[id];
+                if (product) {
+                    modalContent.innerHTML = `
+                        <h2 style="font-family:'Playfair Display',serif; color:var(--medio); margin-bottom:1rem;">${product.title}</h2>
+                        <div style="display:flex; flex-wrap:wrap; gap:20px;">
+                            <img src="${product.image}" style="flex:1; min-width:180px; max-width:100%; border-radius:15px; object-fit:cover;">
+                            <div style="flex:2; min-width:180px;">
+                                <p style="color:#555; line-height:1.6;">${product.description}</p>
+                                <p class="price" style="margin:1rem 0;">${formatBRL(product.price)}</p>
+                                <div class="modal-actions">
+                                    <button class="btn" id="modal-add-btn" data-addcart="${product.id}">
+                                        <i class="fas fa-shopping-bag"></i> Adicionar ao Carrinho
+                                    </button>
                                 </div>
                             </div>
-                        `;
-                        modal.classList.add('active');
+                        </div>
+                    `;
+                    modal.classList.add('active');
+                }
+            }
+        });
+
+        closeModal.addEventListener('click', () => modal.classList.remove('active'));
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.remove('active');
+        });
+
+        // ===== LOADER =====
+        window.addEventListener('load', function() {
+            document.getElementById('loader').classList.add('hidden');
+            setTimeout(() => document.getElementById('loader').style.display = 'none', 600);
+        });
+
+        // ===== ANO =====
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // ===== MOSTRAR MAIS =====
+        const showMoreBtn = document.getElementById('show-more-btn');
+        const moreContent = document.getElementById('more-content');
+        showMoreBtn.addEventListener('click', () => {
+            const hidden = moreContent.style.display === 'none';
+            moreContent.style.display = hidden ? 'block' : 'none';
+            showMoreBtn.textContent = hidden ? 'Mostrar Menos' : 'Mostrar Mais';
+        });
+
+        // ===== BACK TO TOP =====
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('active', window.scrollY > 300);
+        });
+        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // ===== ROLAGEM SUAVE =====
+        const navLinks = document.querySelectorAll('nav a');
+        const nav = document.querySelector('nav');
+        if (navLinks.length && nav) {
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetEl = document.querySelector(link.getAttribute('href'));
+                    if (targetEl) {
+                        const top = targetEl.getBoundingClientRect().top + window.scrollY - nav.offsetHeight - 10;
+                        window.scrollTo({ top, behavior: 'smooth' });
+                        history.pushState(null, null, link.getAttribute('href'));
                     }
-                }
-            });
-
-            closeModal.addEventListener('click', () => modal.classList.remove('active'));
-            window.addEventListener('click', (e) => {
-                if (e.target === modal) modal.classList.remove('active');
-            });
-
-            // ===== PARTÍCULAS DE FUNDO (CANVAS) =====
-            const canvas = document.getElementById('particles-canvas');
-            const ctx = canvas.getContext('2d');
-            let width, height;
-            let particles = [];
-
-            function initParticles() {
-                width = window.innerWidth;
-                height = window.innerHeight;
-                canvas.width = width;
-                canvas.height = height;
-                particles = [];
-                const particleCount = 35;
-                for (let i = 0; i < particleCount; i++) {
-                    particles.push({
-                        x: Math.random() * width,
-                        y: Math.random() * height,
-                        size: Math.random() * 2.5 + 1,
-                        speedX: (Math.random() - 0.5) * 0.2,
-                        speedY: (Math.random() - 0.5) * 0.2,
-                        color: `rgba(217, 127, 119, ${Math.random() * 0.3})`
-                    });
-                }
-            }
-
-            function animateParticles() {
-                ctx.clearRect(0, 0, width, height);
-                particles.forEach(p => {
-                    p.x += p.speedX;
-                    p.y += p.speedY;
-                    if (p.x < 0 || p.x > width) p.speedX *= -1;
-                    if (p.y < 0 || p.y > height) p.speedY *= -1;
-
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fillStyle = p.color;
-                    ctx.fill();
                 });
-                requestAnimationFrame(animateParticles);
-            }
-
-            window.addEventListener('resize', () => {
-                initParticles();
             });
+        }
 
-            initParticles();
-            animateParticles();
-
-            // ===== RASTRO DO MOUSE =====
-            const trailCanvas = document.createElement('canvas');
-            trailCanvas.id = 'mouse-trail';
-            document.body.appendChild(trailCanvas);
-            const trailCtx = trailCanvas.getContext('2d');
-            let trailWidth, trailHeight;
-            let mouseX = 0, mouseY = 0;
-            let trailPositions = [];
-
-            function initTrailCanvas() {
-                trailWidth = window.innerWidth;
-                trailHeight = window.innerHeight;
-                trailCanvas.width = trailWidth;
-                trailCanvas.height = trailHeight;
-            }
-
-            function updateTrail() {
-                trailPositions.unshift({ x: mouseX, y: mouseY, age: 0 });
-                if (trailPositions.length > 30) {
-                    trailPositions.pop();
-                }
-                trailPositions.forEach(p => p.age++);
-                trailCtx.clearRect(0, 0, trailWidth, trailHeight);
-                trailPositions.forEach((p, index) => {
-                    const opacity = Math.max(0, 1 - p.age / 30);
-                    const size = 8 * (1 - p.age / 30);
-                    trailCtx.beginPath();
-                    trailCtx.arc(p.x, p.y, size, 0, Math.PI * 2);
-                    trailCtx.fillStyle = `rgba(217, 127, 119, ${opacity * 0.4})`;
-                    trailCtx.fill();
-                });
-                requestAnimationFrame(updateTrail);
-            }
-
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
+        // ===== PARTÍCULAS =====
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function initParticles() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = Array.from({ length: 35 }, () => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2.5 + 1,
+                speedX: (Math.random() - 0.5) * 0.2,
+                speedY: (Math.random() - 0.5) * 0.2,
+                color: `rgba(217,127,119,${Math.random() * 0.3})`
+            }));
+        }
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX; p.y += p.speedY;
+                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
             });
+            requestAnimationFrame(animateParticles);
+        }
+        window.addEventListener('resize', initParticles);
+        initParticles();
+        animateParticles();
 
-            window.addEventListener('load', () => {
-                initTrailCanvas();
-                updateTrail();
+        // ===== RASTRO DO MOUSE =====
+        const trailCanvas = document.createElement('canvas');
+        trailCanvas.id = 'mouse-trail';
+        document.body.appendChild(trailCanvas);
+        const trailCtx = trailCanvas.getContext('2d');
+        let mouseX = 0, mouseY = 0, trailPositions = [];
+        function initTrail() {
+            trailCanvas.width = window.innerWidth;
+            trailCanvas.height = window.innerHeight;
+        }
+        function updateTrail() {
+            trailPositions.unshift({ x: mouseX, y: mouseY, age: 0 });
+            if (trailPositions.length > 30) trailPositions.pop();
+            trailPositions.forEach(p => p.age++);
+            trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+            trailPositions.forEach(p => {
+                const op = Math.max(0, 1 - p.age / 30);
+                trailCtx.beginPath();
+                trailCtx.arc(p.x, p.y, 8 * (1 - p.age / 30), 0, Math.PI * 2);
+                trailCtx.fillStyle = `rgba(217,127,119,${op * 0.4})`;
+                trailCtx.fill();
             });
+            requestAnimationFrame(updateTrail);
+        }
+        document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+        window.addEventListener('load', () => { initTrail(); updateTrail(); });
+        window.addEventListener('resize', initTrail);
 
-            window.addEventListener('resize', () => {
-                initTrailCanvas();
-            });
-        })();
+        // Inicializar carrinho vazio
+        renderCart();
+
+    })();
     </script>
 </body>
 </html>
