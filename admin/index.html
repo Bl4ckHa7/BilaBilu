@@ -6,18 +6,35 @@
   <title>BilaBilu - Admin</title>
 </head>
 <body>
+  <!-- Scripts do CMS e Identity -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
   <script>
+    // Garante que o Identity não redirecione após login
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', user => {
+      window.netlifyIdentity.on('init', (user) => {
         if (!user) {
+          // Se não estiver logado, abre a janela de login
           window.netlifyIdentity.on('login', () => {
-            document.location.href = '/admin/';
+            // Após login, recarrega a página para o CMS iniciar
+            document.location.reload();
           });
+        } else {
+          // Já está logado: apenas recarrega se necessário
+          if (window.CMS) {
+            // CMS já carregado, não precisa fazer nada
+          } else {
+            // Aguarda um pouco e recarrega para garantir que o CMS inicie
+            setTimeout(() => document.location.reload(), 500);
+          }
         }
       });
+      // Inicia o widget
+      window.netlifyIdentity.init();
     }
   </script>
+
+  <!-- O Decap CMS carrega automaticamente a configuração de /admin/config.yml -->
 </body>
 </html>
