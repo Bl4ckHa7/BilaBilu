@@ -2,44 +2,14 @@
     // ============================================================
     //  ⚙️  CONFIGURAÇÃO — altere o número do WhatsApp aqui
     // ============================================================
-    const WHATSAPP_NUMBER = '5511992549400'; // ← troque pelo número real (com DDI+DDD, sem espaços ou traços)
+    const WHATSAPP_NUMBER = '5511992549400'; // ← troque pelo número real
     // ============================================================
 
-    // ===== DADOS DOS PRODUTOS =====
-    const productsData = {
-        fe: [
-            { id: 1,   title: "Santinhas",       description: "Linda santinha feita em crochê com fio 100% algodão. Tamanho 25cm.",                              price: 240, image: "css/Imagens/Mãezinhadocéu.jpeg" },
-            { id: 2,   title: "Anjinhos",         description: "Anjo protetor em crochê, perfeito para presentear. 20cm de altura.",                              price: 180, image: "css/Imagens/IMG_0913.PNG" },
-            { id: 3,   title: "Terços",           description: "Terço de crochê com contas e crucifixo artesanal. 50cm.",                                        price: 90,  image: "css/Imagens/IMG_0921.PNG" },
-            { id: 4,   title: "Presépio",         description: "Conjunto completo do presépio em crochê (Menino Jesus, Maria, José, animais).",                  price: 580, image: "css/Imagens/IMG_0909.PNG" },
-            { id: 5,   title: "Sagrada Família",  description: "Representação da Sagrada Família em crochê. 30cm cada peça.",                                    price: 450, image: "css/Imagens/Nossasenhora.jpeg" },
-            { id: 6,   title: "Jesus",            description: "Imagem de Jesus em crochê, 25cm de altura.",                                                     price: 220, image: "css/Imagens/Nossasenhora2.jpeg" }
-        ],
-        bebe: [
-            { id: 101, title: "Móbile",           description: "Móbile de crochê com bichinhos para berço. Estimula os sentidos do bebê.",                       price: 150, image: "css/Imagens/IMG_0913.PNG" },
-            { id: 102, title: "Porta maternidade",description: "Porta maternidade personalizado com nome e data, feito em crochê.",                              price: 120, image: "css/Imagens/IMG_0921.PNG" },
-            { id: 103, title: "Naninha",          description: "Naninha macia de crochê com cabeça de ursinho. 30x30cm.",                                        price: 85,  image: "css/Imagens/IMG_0909.PNG" },
-            { id: 104, title: "Fofuras",          description: "Conjunto de fofuras: sapatinho, luvinha e gorro em crochê.",                                     price: 110, image: "css/Imagens/IMG_0913.PNG" },
-            { id: 105, title: "Zoo safari",       description: "Bichinhos de crochê temáticos de safári: leão, girafa, elefante. 15cm.",                         price: 95,  image: "css/Imagens/IMG_0921.PNG" },
-            { id: 106, title: "Chocalho",         description: "Chocalho de crochê em formato de flor, seguro e colorido.",                                      price: 45,  image: "css/Imagens/IMG_0909.PNG" }
-        ],
-        personagens: [
-            { id: 201, title: "Personagens",      description: "Seu personagem favorito feito em crochê sob encomenda.",                                         price: 140, image: "css/Imagens/IMG_0913.PNG" },
-            { id: 202, title: "Turma moranguinho",description: "Moranguinho e suas amigas em versão crochê.",                                                    price: 130, image: "css/Imagens/IMG_0921.PNG" },
-            { id: 203, title: "Turma chaves",     description: "Chaves, Chiquinha e Kiko em crochê. Tamanho 20cm.",                                              price: 150, image: "css/Imagens/IMG_0909.PNG" },
-            { id: 204, title: "Turma lilo",       description: "Lilo & Stitch em crochê, réplica fiel e cheia de detalhes.",                                     price: 160, image: "css/Imagens/IMG_0913.PNG" },
-            { id: 205, title: "Bonecas",          description: "Bonecas de crochê com roupinhas removíveis. 30cm.",                                              price: 180, image: "css/Imagens/IMG_0921.PNG" },
-            { id: 206, title: "Bonecos",          description: "Bonecos diversos em crochê, prontos para brincar ou decorar.",                                   price: 120, image: "css/Imagens/IMG_0909.PNG" }
-        ]
-    };
-
-    // Mapa global de id → produto
-    const allProducts = {};
-    [...productsData.fe, ...productsData.bebe, ...productsData.personagens]
-        .forEach(p => allProducts[p.id] = p);
-
-    // ===== ESTADO DO CARRINHO =====
-    let cart = []; // [{ id, qty }]
+    // ===== ESTADO GLOBAL =====
+    let productsData = { fe: [], bebe: [], personagens: [] };
+    let allProducts = {};      // mapa id → produto
+    let cart = [];             // [{ id, qty }]
+    let loaded = false;        // flag para saber se os produtos foram carregados
 
     // ===== UTILIDADES =====
     function formatBRL(value) {
@@ -53,15 +23,16 @@
         setTimeout(() => toast.classList.remove('show'), 2500);
     }
 
-    // ===== CARRINHO — LÓGICA =====
+    // ===== CARRINHO =====
     function getCartTotal() {
-        return cart.reduce((acc, item) => acc + allProducts[item.id].price * item.qty, 0);
+        return cart.reduce((acc, item) => acc + (allProducts[item.id]?.price || 0) * item.qty, 0);
     }
     function getCartCount() {
         return cart.reduce((acc, item) => acc + item.qty, 0);
     }
 
     function addToCart(productId) {
+        if (!allProducts[productId]) return;
         const existing = cart.find(i => i.id === productId);
         if (existing) {
             existing.qty++;
@@ -88,9 +59,11 @@
     }
 
     function clearCart() {
-        cart = [];
-        renderCart();
-        updateBadge();
+        if (confirm('Deseja limpar o carrinho?')) {
+            cart = [];
+            renderCart();
+            updateBadge();
+        }
     }
 
     function updateBadge() {
@@ -121,6 +94,7 @@
 
         cart.forEach(item => {
             const product = allProducts[item.id];
+            if (!product) return;
             const subtotal = product.price * item.qty;
             const div = document.createElement('div');
             div.className = 'cart-item';
@@ -142,7 +116,6 @@
             list.appendChild(div);
         });
 
-        // Resumo
         const total = getCartTotal();
         const count = getCartCount();
         summary.innerHTML = `
@@ -156,7 +129,6 @@
             </div>
         `;
 
-        // Montar link WhatsApp
         buildWhatsAppLink();
     }
 
@@ -164,6 +136,7 @@
         const lines = ['🛒 *MEU PEDIDO – BilaBilu Crochê*', ''];
         cart.forEach(item => {
             const p = allProducts[item.id];
+            if (!p) return;
             const subtotal = formatBRL(p.price * item.qty);
             lines.push(`• ${item.qty}x ${p.title} — ${subtotal}`);
         });
@@ -182,9 +155,7 @@
     document.getElementById('cart-float-btn').addEventListener('click', openCart);
     document.getElementById('cart-close-btn').addEventListener('click', closeCart);
     document.getElementById('cart-overlay').addEventListener('click', closeCart);
-    document.getElementById('btn-clear-cart').addEventListener('click', () => {
-        if (confirm('Deseja limpar o carrinho?')) clearCart();
-    });
+    document.getElementById('btn-clear-cart').addEventListener('click', clearCart);
 
     document.getElementById('cart-items-list').addEventListener('click', (e) => {
         const btn = e.target.closest('[data-action]');
@@ -207,10 +178,15 @@
         document.body.style.overflow = '';
     }
 
-    // ===== RENDERIZAR PRODUTOS =====
+    // ===== RENDERIZAÇÃO DOS PRODUTOS =====
     function renderProducts(containerId, items) {
         const container = document.getElementById(containerId);
+        if (!container) return;
         container.innerHTML = '';
+        if (!items.length) {
+            container.innerHTML = '<p style="text-align:center; padding:2rem;">Nenhum produto nesta categoria.</p>';
+            return;
+        }
         items.forEach(item => {
             const card = document.createElement('div');
             card.className = 'product-card';
@@ -221,7 +197,7 @@
                     <p>${item.description}</p>
                     <span class="price">${formatBRL(item.price)}</span>
                     <div class="product-actions">
-                        <button class="btn view-product" data-id="${item.id}" data-type="${containerId}">
+                        <button class="btn view-product" data-id="${item.id}">
                             <i class="fas fa-eye"></i> Ver Detalhes
                         </button>
                         <button class="btn-add-cart" data-addcart="${item.id}">
@@ -234,24 +210,40 @@
         });
     }
 
-    renderProducts('fe-container', productsData.fe);
-    renderProducts('bebe-container', productsData.bebe);
-    renderProducts('personagens-container', productsData.personagens);
+    // ===== CARREGAR PRODUTOS DO JSON =====
+    function loadProducts() {
+        fetch('data/products.json')
+            .then(response => {
+                if (!response.ok) throw new Error('Falha ao carregar produtos');
+                return response.json();
+            })
+            .then(products => {
+                // Organizar por categoria
+                productsData = {
+                    fe: products.filter(p => p.category === 'fe'),
+                    bebe: products.filter(p => p.category === 'bebe'),
+                    personagens: products.filter(p => p.category === 'personagens')
+                };
+                // Preencher mapa allProducts
+                products.forEach(p => allProducts[p.id] = p);
 
-    // Delegação — botão "Adicionar" nos cards
-    document.addEventListener('click', (e) => {
-        const addBtn = e.target.closest('[data-addcart]');
-        if (addBtn) {
-            addToCart(parseInt(addBtn.dataset.addcart));
-            addBtn.classList.add('added');
-            const orig = addBtn.innerHTML;
-            addBtn.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
-            setTimeout(() => {
-                addBtn.classList.remove('added');
-                addBtn.innerHTML = orig;
-            }, 1800);
-        }
-    });
+                // Renderizar as seções
+                renderProducts('fe-container', productsData.fe);
+                renderProducts('bebe-container', productsData.bebe);
+                renderProducts('personagens-container', productsData.personagens);
+
+                loaded = true;
+                // Recarregar o carrinho (caso já houvesse itens, mas não havia produtos carregados)
+                renderCart();
+            })
+            .catch(error => {
+                console.error('Erro ao carregar produtos:', error);
+                // Mostrar mensagem amigável nas seções
+                document.querySelectorAll('.products').forEach(container => {
+                    container.innerHTML = '<p style="text-align:center; padding:2rem;">⚠️ Não foi possível carregar os produtos. Tente novamente mais tarde.</p>';
+                });
+            });
+    }
 
     // ===== MODAL =====
     const modal = document.getElementById('product-modal');
@@ -288,8 +280,22 @@
         if (e.target === modal) modal.classList.remove('active');
     });
 
+    // Delegação para botões "Adicionar" (nos cards e no modal)
+    document.addEventListener('click', (e) => {
+        const addBtn = e.target.closest('[data-addcart]');
+        if (addBtn && loaded) {
+            addToCart(parseInt(addBtn.dataset.addcart));
+            const originalHtml = addBtn.innerHTML;
+            addBtn.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
+            setTimeout(() => { addBtn.innerHTML = originalHtml; }, 1800);
+        } else if (addBtn && !loaded) {
+            showToast('Aguarde, produtos estão carregando...');
+        }
+    });
+
     // ===== LOADER =====
     window.addEventListener('load', function() {
+        loadProducts(); // carrega os produtos
         document.getElementById('loader').classList.add('hidden');
         setTimeout(() => document.getElementById('loader').style.display = 'none', 600);
     });
@@ -300,11 +306,13 @@
     // ===== MOSTRAR MAIS =====
     const showMoreBtn = document.getElementById('show-more-btn');
     const moreContent = document.getElementById('more-content');
-    showMoreBtn.addEventListener('click', () => {
-        const hidden = moreContent.style.display === 'none';
-        moreContent.style.display = hidden ? 'block' : 'none';
-        showMoreBtn.textContent = hidden ? 'Mostrar Menos' : 'Mostrar Mais';
-    });
+    if (showMoreBtn && moreContent) {
+        showMoreBtn.addEventListener('click', () => {
+            const hidden = moreContent.style.display === 'none';
+            moreContent.style.display = hidden ? 'block' : 'none';
+            showMoreBtn.textContent = hidden ? 'Mostrar Menos' : 'Mostrar Mais';
+        });
+    }
 
     // ===== BACK TO TOP =====
     const backToTop = document.getElementById('back-to-top');
@@ -330,7 +338,7 @@
         });
     }
 
-    // ===== PARTÍCULAS =====
+    // ===== PARTÍCULAS E RASTRO =====
     const canvas = document.getElementById('particles-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -363,7 +371,7 @@
     initParticles();
     animateParticles();
 
-    // ===== RASTRO DO MOUSE =====
+    // Rastro do mouse
     const trailCanvas = document.createElement('canvas');
     trailCanvas.id = 'mouse-trail';
     document.body.appendChild(trailCanvas);
@@ -391,7 +399,6 @@
     window.addEventListener('load', () => { initTrail(); updateTrail(); });
     window.addEventListener('resize', initTrail);
 
-    // Inicializar carrinho vazio
+    // Inicializar carrinho vazio (espera o load)
     renderCart();
-
 })();
