@@ -1,0 +1,12 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "teste",
+      "description": "teste",
+      "price": 200,
+      "image": "css/Imagens/capa-anuncio.png",
+      "category": "fe"
+    }
+  ]
+}
