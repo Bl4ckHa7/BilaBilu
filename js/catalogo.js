@@ -2,7 +2,7 @@
     // ============================================================
     //  ⚙️  CONFIGURAÇÃO — altere o número do WhatsApp aqui
     // ============================================================
-    const WHATSAPP_NUMBER = '5511953820143'; // ← troque pelo número real
+    const WHATSAPP_NUMBER = '5511992549400'; // ← troque pelo número real
     // ============================================================
 
     // ===== ESTADO GLOBAL =====
