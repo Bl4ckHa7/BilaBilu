@@ -15,44 +15,33 @@
   </style>
 </head>
 <body>
-  <!-- Carrega o widget de autenticação do Netlify -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  
   <script>
-    // Configuração para evitar redirecionamento para a página inicial
-    window.netlifyIdentity = window.netlifyIdentity || {};
-    window.netlifyIdentity.on = (event, cb) => {
-      // Aguarda o widget carregar
-      setTimeout(() => {
-        if (window.netlifyIdentity && window.netlifyIdentity.on) {
-          window.netlifyIdentity.on(event, cb);
-        }
-      }, 100);
-    };
-
-    // Inicializa o widget
+    // Intercepta o redirecionamento após login e força a permanência em /admin/
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.init();
-      
-      // Se já estiver logado, recarrega para garantir que o CMS seja carregado
-      window.netlifyIdentity.on('init', (user) => {
-        if (user) {
-          // Já logado – recarrega para iniciar o CMS
-          if (!window.CMS) {
-            setTimeout(() => location.reload(), 500);
-          }
-        } else {
-          // Não logado – abre a janela de login
+      window.netlifyIdentity.on('init', user => {
+        if (!user) {
+          // Se não está logado, aguarda o login
           window.netlifyIdentity.on('login', () => {
-            // Após login, recarrega para o CMS iniciar
-            location.reload();
+            // Após login, verifica se a URL atual é a raiz e redireciona para /admin/
+            if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+              window.location.href = '/admin/';
+            } else {
+              window.location.reload();
+            }
           });
+        } else {
+          // Se já está logado, garante que está em /admin/
+          if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+            window.location.href = '/admin/';
+          }
         }
       });
+      window.netlifyIdentity.init();
     }
   </script>
 
-  <!-- Carrega o Decap CMS (ele lê automaticamente o config.yml) -->
+  <!-- Carrega o Decap CMS (ele lê automaticamente /admin/config.yml) -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
 </html>
