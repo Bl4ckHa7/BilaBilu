@@ -4,59 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BilaBilu - Admin</title>
-  <style>
-    body { margin: 0; font-family: sans-serif; }
-    #nc-root { min-height: 100vh; }
-  </style>
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-  <script>
-    window.CMS_MANUAL_INIT = true;
-    window.CMS_CONFIG = {
-      backend: {
-        name: 'git-gateway',
-        branch: 'main' // ou 'master' se seu repositório usar esse nome
-      },
-      media_folder: 'public/css/Imagens',
-      public_folder: 'css/Imagens',
-      collections: [
-        {
-          name: 'products',
-          label: 'Produtos',
-          folder: 'data',
-          create: true,
-          slug: '{{id}}',
-          fields: [
-            { label: 'ID', name: 'id', widget: 'number', required: true, valueType: 'int' },
-            { label: 'Título', name: 'title', widget: 'string' },
-            { label: 'Descrição', name: 'description', widget: 'text' },
-            { label: 'Preço (R$)', name: 'price', widget: 'number', valueType: 'int' },
-            { label: 'Imagem', name: 'image', widget: 'image', media_library: { config: { max_file_size: 5000000 } } },
-            {
-              label: 'Categoria',
-              name: 'category',
-              widget: 'select',
-              options: [
-                { label: 'Cantinho da fé', value: 'fe' },
-                { label: 'Cantinho do bebê', value: 'bebe' },
-                { label: 'Personagens', value: 'personagens' }
-              ]
-            }
-          ]
-        }
-      ]
-    };
-    // Inicializa o CMS
-    import('https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js').then(
-      (module) => module.init({ config: window.CMS_CONFIG })
-    );
-  </script>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script>
-    // Autenticação
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('init', (user) => {
+      window.netlifyIdentity.on('init', user => {
         if (!user) {
           window.netlifyIdentity.on('login', () => {
             document.location.href = '/admin/';
