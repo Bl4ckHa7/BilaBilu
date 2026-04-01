@@ -212,12 +212,13 @@
 
     // ===== CARREGAR PRODUTOS DO JSON =====
     function loadProducts() {
-        fetch('data/products.json')
+        fetch('products.json')
             .then(response => {
                 if (!response.ok) throw new Error('Falha ao carregar produtos');
                 return response.json();
             })
-            .then(products => {
+            .then(data => {
+                const products = data.products;
                 // Organizar por categoria
                 productsData = {
                     fe: products.filter(p => p.category === 'fe'),

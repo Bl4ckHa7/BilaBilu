@@ -1,146 +1,148 @@
-[
-  {
-    "id": 1,
-    "title": "Santinhas",
-    "description": "Linda santinha feita em crochê com fio 100% algodão. Tamanho 25cm.",
-    "price": 240,
-    "image": "css/Imagens/Mãezinhadocéu.jpeg",
-    "category": "fe"
-  },
-  {
-    "id": 2,
-    "title": "Anjinhos",
-    "description": "Anjo protetor em crochê, perfeito para presentear. 20cm de altura.",
-    "price": 180,
-    "image": "css/Imagens/IMG_0913.PNG",
-    "category": "fe"
-  },
-  {
-    "id": 3,
-    "title": "Terços",
-    "description": "Terço de crochê com contas e crucifixo artesanal. 50cm.",
-    "price": 90,
-    "image": "css/Imagens/IMG_0921.PNG",
-    "category": "fe"
-  },
-  {
-    "id": 4,
-    "title": "Presépio",
-    "description": "Conjunto completo do presépio em crochê (Menino Jesus, Maria, José, animais).",
-    "price": 580,
-    "image": "css/Imagens/IMG_0909.PNG",
-    "category": "fe"
-  },
-  {
-    "id": 5,
-    "title": "Sagrada Família",
-    "description": "Representação da Sagrada Família em crochê. 30cm cada peça.",
-    "price": 450,
-    "image": "css/Imagens/Nossasenhora.jpeg",
-    "category": "fe"
-  },
-  {
-    "id": 6,
-    "title": "Jesus",
-    "description": "Imagem de Jesus em crochê, 25cm de altura.",
-    "price": 220,
-    "image": "css/Imagens/Nossasenhora2.jpeg",
-    "category": "fe"
-  },
-  {
-    "id": 101,
-    "title": "Móbile",
-    "description": "Móbile de crochê com bichinhos para berço. Estimula os sentidos do bebê.",
-    "price": 150,
-    "image": "css/Imagens/IMG_0913.PNG",
-    "category": "bebe"
-  },
-  {
-    "id": 102,
-    "title": "Porta maternidade",
-    "description": "Porta maternidade personalizado com nome e data, feito em crochê.",
-    "price": 120,
-    "image": "css/Imagens/IMG_0921.PNG",
-    "category": "bebe"
-  },
-  {
-    "id": 103,
-    "title": "Naninha",
-    "description": "Naninha macia de crochê com cabeça de ursinho. 30x30cm.",
-    "price": 85,
-    "image": "css/Imagens/IMG_0909.PNG",
-    "category": "bebe"
-  },
-  {
-    "id": 104,
-    "title": "Fofuras",
-    "description": "Conjunto de fofuras: sapatinho, luvinha e gorro em crochê.",
-    "price": 110,
-    "image": "css/Imagens/IMG_0913.PNG",
-    "category": "bebe"
-  },
-  {
-    "id": 105,
-    "title": "Zoo safari",
-    "description": "Bichinhos de crochê temáticos de safári: leão, girafa, elefante. 15cm.",
-    "price": 95,
-    "image": "css/Imagens/IMG_0921.PNG",
-    "category": "bebe"
-  },
-  {
-    "id": 106,
-    "title": "Chocalho",
-    "description": "Chocalho de crochê em formato de flor, seguro e colorido.",
-    "price": 45,
-    "image": "css/Imagens/IMG_0909.PNG",
-    "category": "bebe"
-  },
-  {
-    "id": 201,
-    "title": "Personagens",
-    "description": "Seu personagem favorito feito em crochê sob encomenda.",
-    "price": 140,
-    "image": "css/Imagens/IMG_0913.PNG",
-    "category": "personagens"
-  },
-  {
-    "id": 202,
-    "title": "Turma moranguinho",
-    "description": "Moranguinho e suas amigas em versão crochê.",
-    "price": 130,
-    "image": "css/Imagens/IMG_0921.PNG",
-    "category": "personagens"
-  },
-  {
-    "id": 203,
-    "title": "Turma chaves",
-    "description": "Chaves, Chiquinha e Kiko em crochê. Tamanho 20cm.",
-    "price": 150,
-    "image": "css/Imagens/IMG_0909.PNG",
-    "category": "personagens"
-  },
-  {
-    "id": 204,
-    "title": "Turma lilo",
-    "description": "Lilo & Stitch em crochê, réplica fiel e cheia de detalhes.",
-    "price": 160,
-    "image": "css/Imagens/IMG_0913.PNG",
-    "category": "personagens"
-  },
-  {
-    "id": 205,
-    "title": "Bonecas",
-    "description": "Bonecas de crochê com roupinhas removíveis. 30cm.",
-    "price": 180,
-    "image": "css/Imagens/IMG_0921.PNG",
-    "category": "personagens"
-  },
-  {
-    "id": 206,
-    "title": "Bonecos",
-    "description": "Bonecos diversos em crochê, prontos para brincar ou decorar.",
-    "price": 120,
-    "image": "css/Imagens/IMG_0909.PNG",
-    "category": "personagens"
-  }
-]
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "Santinhas",
+      "description": "Linda santinha feita em crochê com fio 100% algodão. Tamanho 25cm.",
+      "price": 240,
+      "image": "css/Imagens/Mãezinhadocéu.jpeg",
+      "category": "fe"
+    },
+    {
+      "id": 2,
+      "title": "Anjinhos",
+      "description": "Anjo protetor em crochê, perfeito para presentear. 20cm de altura.",
+      "price": 180,
+      "image": "css/Imagens/IMG_0913.PNG",
+      "category": "fe"
+    },
+    {
+      "id": 3,
+      "title": "Terços",
+      "description": "Terço de crochê com contas e crucifixo artesanal. 50cm.",
+      "price": 90,
+      "image": "css/Imagens/IMG_0921.PNG",
+      "category": "fe"
+    },
+    {
+      "id": 4,
+      "title": "Presépio",
+      "description": "Conjunto completo do presépio em crochê (Menino Jesus, Maria, José, animais).",
+      "price": 580,
+      "image": "css/Imagens/IMG_0909.PNG",
+      "category": "fe"
+    },
+    {
+      "id": 5,
+      "title": "Sagrada Família",
+      "description": "Representação da Sagrada Família em crochê. 30cm cada peça.",
+      "price": 450,
+      "image": "css/Imagens/Nossasenhora.jpeg",
+      "category": "fe"
+    },
+    {
+      "id": 6,
+      "title": "Jesus",
+      "description": "Imagem de Jesus em crochê, 25cm de altura.",
+      "price": 220,
+      "image": "css/Imagens/Nossasenhora2.jpeg",
+      "category": "fe"
+    },
+    {
+      "id": 101,
+      "title": "Móbile",
+      "description": "Móbile de crochê com bichinhos para berço. Estimula os sentidos do bebê.",
+      "price": 150,
+      "image": "css/Imagens/IMG_0913.PNG",
+      "category": "bebe"
+    },
+    {
+      "id": 102,
+      "title": "Porta maternidade",
+      "description": "Porta maternidade personalizado com nome e data, feito em crochê.",
+      "price": 120,
+      "image": "css/Imagens/IMG_0921.PNG",
+      "category": "bebe"
+    },
+    {
+      "id": 103,
+      "title": "Naninha",
+      "description": "Naninha macia de crochê com cabeça de ursinho. 30x30cm.",
+      "price": 85,
+      "image": "css/Imagens/IMG_0909.PNG",
+      "category": "bebe"
+    },
+    {
+      "id": 104,
+      "title": "Fofuras",
+      "description": "Conjunto de fofuras: sapatinho, luvinha e gorro em crochê.",
+      "price": 110,
+      "image": "css/Imagens/IMG_0913.PNG",
+      "category": "bebe"
+    },
+    {
+      "id": 105,
+      "title": "Zoo safari",
+      "description": "Bichinhos de crochê temáticos de safári: leão, girafa, elefante. 15cm.",
+      "price": 95,
+      "image": "css/Imagens/IMG_0921.PNG",
+      "category": "bebe"
+    },
+    {
+      "id": 106,
+      "title": "Chocalho",
+      "description": "Chocalho de crochê em formato de flor, seguro e colorido.",
+      "price": 45,
+      "image": "css/Imagens/IMG_0909.PNG",
+      "category": "bebe"
+    },
+    {
+      "id": 201,
+      "title": "Personagens",
+      "description": "Seu personagem favorito feito em crochê sob encomenda.",
+      "price": 140,
+      "image": "css/Imagens/IMG_0913.PNG",
+      "category": "personagens"
+    },
+    {
+      "id": 202,
+      "title": "Turma moranguinho",
+      "description": "Moranguinho e suas amigas em versão crochê.",
+      "price": 130,
+      "image": "css/Imagens/IMG_0921.PNG",
+      "category": "personagens"
+    },
+    {
+      "id": 203,
+      "title": "Turma chaves",
+      "description": "Chaves, Chiquinha e Kiko em crochê. Tamanho 20cm.",
+      "price": 150,
+      "image": "css/Imagens/IMG_0909.PNG",
+      "category": "personagens"
+    },
+    {
+      "id": 204,
+      "title": "Turma lilo",
+      "description": "Lilo & Stitch em crochê, réplica fiel e cheia de detalhes.",
+      "price": 160,
+      "image": "css/Imagens/IMG_0913.PNG",
+      "category": "personagens"
+    },
+    {
+      "id": 205,
+      "title": "Bonecas",
+      "description": "Bonecas de crochê com roupinhas removíveis. 30cm.",
+      "price": 180,
+      "image": "css/Imagens/IMG_0921.PNG",
+      "category": "personagens"
+    },
+    {
+      "id": 206,
+      "title": "Bonecos",
+      "description": "Bonecos diversos em crochê, prontos para brincar ou decorar.",
+      "price": 120,
+      "image": "css/Imagens/IMG_0909.PNG",
+      "category": "personagens"
+    }
+  ]
+}

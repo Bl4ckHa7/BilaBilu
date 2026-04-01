@@ -8,19 +8,24 @@ public_folder: "css/Imagens"   # Caminho público para as imagens
 collections:
   - name: "products"
     label: "Produtos"
-    folder: "data"
-    create: true
-    slug: "{{id}}"
-    fields:
-      - { label: "ID", name: "id", widget: "number", required: true, valueType: "int" }
-      - { label: "Título", name: "title", widget: "string" }
-      - { label: "Descrição", name: "description", widget: "text" }
-      - { label: "Preço (R$)", name: "price", widget: "number", valueType: "int" }
-      - { label: "Imagem", name: "image", widget: "image", media_library: { config: { max_file_size: 5000000 } } }
-      - label: "Categoria"
-        name: "category"
-        widget: "select"
-        options:
-          - { label: "Cantinho da fé", value: "fe" }
-          - { label: "Cantinho do bebê", value: "bebe" }
-          - { label: "Personagens", value: "personagens" }
+    files:
+      - label: "Lista de Produtos"
+        name: "products_list"
+        file: "products.json"
+        fields:
+          - label: "Produtos"
+            name: "products"
+            widget: "list"
+            fields:
+              - { label: "ID", name: "id", widget: "number", required: true, valueType: "int" }
+              - { label: "Título", name: "title", widget: "string" }
+              - { label: "Descrição", name: "description", widget: "text" }
+              - { label: "Preço (R$)", name: "price", widget: "number", valueType: "int" }
+              - { label: "Imagem", name: "image", widget: "image", media_library: { config: { max_file_size: 5000000 } } }
+              - label: "Categoria"
+                name: "category"
+                widget: "select"
+                options:
+                  - { label: "Cantinho da fé", value: "fe" }
+                  - { label: "Cantinho do bebê", value: "bebe" }
+                  - { label: "Personagens", value: "personagens" }
