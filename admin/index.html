@@ -4,37 +4,55 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BilaBilu - Admin</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    #nc-root {
+      min-height: 100vh;
+    }
+  </style>
 </head>
 <body>
-  <!-- Scripts do CMS e Identity -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <!-- Carrega o widget de autenticação do Netlify -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
+  
   <script>
-    // Garante que o Identity não redirecione após login
+    // Configuração para evitar redirecionamento para a página inicial
+    window.netlifyIdentity = window.netlifyIdentity || {};
+    window.netlifyIdentity.on = (event, cb) => {
+      // Aguarda o widget carregar
+      setTimeout(() => {
+        if (window.netlifyIdentity && window.netlifyIdentity.on) {
+          window.netlifyIdentity.on(event, cb);
+        }
+      }, 100);
+    };
+
+    // Inicializa o widget
     if (window.netlifyIdentity) {
+      window.netlifyIdentity.init();
+      
+      // Se já estiver logado, recarrega para garantir que o CMS seja carregado
       window.netlifyIdentity.on('init', (user) => {
-        if (!user) {
-          // Se não estiver logado, abre a janela de login
-          window.netlifyIdentity.on('login', () => {
-            // Após login, recarrega a página para o CMS iniciar
-            document.location.reload();
-          });
-        } else {
-          // Já está logado: apenas recarrega se necessário
-          if (window.CMS) {
-            // CMS já carregado, não precisa fazer nada
-          } else {
-            // Aguarda um pouco e recarrega para garantir que o CMS inicie
-            setTimeout(() => document.location.reload(), 500);
+        if (user) {
+          // Já logado – recarrega para iniciar o CMS
+          if (!window.CMS) {
+            setTimeout(() => location.reload(), 500);
           }
+        } else {
+          // Não logado – abre a janela de login
+          window.netlifyIdentity.on('login', () => {
+            // Após login, recarrega para o CMS iniciar
+            location.reload();
+          });
         }
       });
-      // Inicia o widget
-      window.netlifyIdentity.init();
     }
   </script>
 
-  <!-- O Decap CMS carrega automaticamente a configuração de /admin/config.yml -->
+  <!-- Carrega o Decap CMS (ele lê automaticamente o config.yml) -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
 </html>

@@ -1,9 +1,9 @@
 backend:
   name: git-gateway
-  branch: main  # ou master, dependendo do seu repositório
+  branch: main                 # Altere para 'master' se seu repositório usar esse nome
 
-media_folder: "css/Imagens"
-public_folder: "css/Imagens"
+media_folder: "css/Imagens"    # Pasta onde as imagens serão salvas
+public_folder: "css/Imagens"   # Caminho público para as imagens
 
 collections:
   - name: "products"
@@ -17,4 +17,10 @@ collections:
       - { label: "Descrição", name: "description", widget: "text" }
       - { label: "Preço (R$)", name: "price", widget: "number", valueType: "int" }
       - { label: "Imagem", name: "image", widget: "image", media_library: { config: { max_file_size: 5000000 } } }
-      - { label: "Categoria", name: "category", widget: "select", options: [{ label: "Cantinho da fé", value: "fe" }, { label: "Cantinho do bebê", value: "bebe" }, { label: "Personagens", value: "personagens" }] }
+      - label: "Categoria"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Cantinho da fé", value: "fe" }
+          - { label: "Cantinho do bebê", value: "bebe" }
+          - { label: "Personagens", value: "personagens" }
