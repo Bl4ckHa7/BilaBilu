@@ -41,16 +41,6 @@ body {
     opacity: 0.4;
 }
 
-/* ===== RASTRO DO MOUSE (CANVAS) ===== */
-#mouse-trail {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 9998;
-}
 
 /* ===== LOADER ===== */
 .loader {
@@ -83,8 +73,8 @@ body {
 
 /* ===== HEADER COM BORBOLETAS ===== */
 header {
-    background: linear-gradient(145deg, #b55a4a, #e6938a);
-    color: white;
+    background: linear-gradient(145deg, #ffffff, #ffffff);
+    color: #b55a4a;
     padding: 3rem 1rem;
     text-align: center;
     position: relative;
@@ -119,6 +109,11 @@ header img {
     color: rgba(255, 255, 255, 0.8);
     text-shadow: 0 0 10px rgba(255, 255, 200, 0.8);
     filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
+}
+
+.butterfly img {
+    width: 120px;    /* ajuste este valor para o tamanho desejado (ex: 20px, 25px, 30px) */
+    height: auto;   /* mantém a proporção original */
 }
 
 @keyframes floatButterfly {
