@@ -141,6 +141,14 @@ header img {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
+.header-content p img{  
+    width: 10rem;
+    height: auto;
+    vertical-align: middle;
+    margin-left: 8px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
 /* ===== NAVEGAÇÃO ===== */
 nav {
     background: var(--pastel-1);
