@@ -1,3 +1,12 @@
 {
-  "products": []
+  "products": [
+    {
+      "id": 0,
+      "title": "teste",
+      "description": "testwe",
+      "price": 1234123,
+      "image": "css/Imagens/imagem1.png",
+      "category": "fe"
+    }
+  ]
 }
