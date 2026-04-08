@@ -1,3 +1,12 @@
 {
-  "products": []
+  "products": [
+    {
+      "id": 1,
+      "title": "teste",
+      "description": "teste",
+      "price": 3,
+      "image": "css/Imagens/whatsapp-image-2026-03-19-at-21.23.22.jpeg",
+      "category": "fe"
+    }
+  ]
 }
