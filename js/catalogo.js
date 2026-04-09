@@ -257,10 +257,10 @@
             const product = allProducts[id];
             if (product) {
                 modalContent.innerHTML = `
-                    <div style="text-align:center; background:#fff5f2; border-radius:15px; padding:1rem; margin-bottom:1.2rem;">
+                    <div style="text-align:center; background:#fff5f2; border-radius:15px; padding:0.8rem; margin-bottom:1rem;">
                         <img src="${product.image}" alt="${product.title}"
-                            style="max-width:100%; max-height:360px; width:auto; height:auto;
-                                   object-fit:contain; border-radius:12px; display:block; margin:0 auto;">
+                            style="max-width:100%; max-height:260px; width:auto; height:auto;
+                                   object-fit:contain; border-radius:10px; display:block; margin:0 auto;">
                     </div>
                     <h2 style="font-family:'Playfair Display',serif; color:var(--medio); margin-bottom:0.6rem;">${product.title}</h2>
                     <p style="color:#555; line-height:1.7; margin-bottom:1rem;">${product.description}</p>
