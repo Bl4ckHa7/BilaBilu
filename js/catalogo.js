@@ -257,18 +257,18 @@
             const product = allProducts[id];
             if (product) {
                 modalContent.innerHTML = `
-                    <h2 style="font-family:'Playfair Display',serif; color:var(--medio); margin-bottom:1rem;">${product.title}</h2>
-                    <div style="display:flex; flex-wrap:wrap; gap:20px;">
-                        <img src="${product.image}" style="flex:1; min-width:180px; max-width:100%; border-radius:15px; object-fit:cover;">
-                        <div style="flex:2; min-width:180px;">
-                            <p style="color:#555; line-height:1.6;">${product.description}</p>
-                            <p class="price" style="margin:1rem 0;">${formatBRL(product.price)}</p>
-                            <div class="modal-actions">
-                                <button class="btn" id="modal-add-btn" data-addcart="${product.id}">
-                                    <i class="fas fa-shopping-bag"></i> Adicionar ao Carrinho
-                                </button>
-                            </div>
-                        </div>
+                    <div style="text-align:center; background:#fff5f2; border-radius:15px; padding:1rem; margin-bottom:1.2rem;">
+                        <img src="${product.image}" alt="${product.title}"
+                            style="max-width:100%; max-height:360px; width:auto; height:auto;
+                                   object-fit:contain; border-radius:12px; display:block; margin:0 auto;">
+                    </div>
+                    <h2 style="font-family:'Playfair Display',serif; color:var(--medio); margin-bottom:0.6rem;">${product.title}</h2>
+                    <p style="color:#555; line-height:1.7; margin-bottom:1rem;">${product.description}</p>
+                    <p class="price" style="margin-bottom:1rem;">${formatBRL(product.price)}</p>
+                    <div class="modal-actions">
+                        <button class="btn" id="modal-add-btn" data-addcart="${product.id}">
+                            <i class="fas fa-shopping-bag"></i> Adicionar ao Carrinho
+                        </button>
                     </div>
                 `;
                 modal.classList.add('active');

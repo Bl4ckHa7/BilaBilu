@@ -12,6 +12,29 @@
   <link rel="shortcut icon" href="css/Imagens/imagem2.png" type="image/x-icon">
 </head>
 <body>
+  <!-- Blobs parallax de fundo -->
+  <div class="bg-blob bg-blob-1" id="blob1"></div>
+  <div class="bg-blob bg-blob-2" id="blob2"></div>
+  <div class="bg-blob bg-blob-3" id="blob3"></div>
+
+  <!-- Sparkles decorativos -->
+  <div class="sparkle" style="top:8%;  left:12%; animation-duration:2.6s; animation-delay:0.4s; font-size:1.1rem;">✦</div>
+  <div class="sparkle" style="top:18%; right:10%; animation-duration:3.1s; animation-delay:1.3s; font-size:0.9rem;">✦</div>
+  <div class="sparkle" style="bottom:22%; left:7%;  animation-duration:2.9s; animation-delay:0.8s; font-size:1rem;">✦</div>
+  <div class="sparkle" style="bottom:14%; right:18%; animation-duration:3.5s; animation-delay:2s;   font-size:1.2rem;">✦</div>
+  <div class="sparkle" style="top:55%;  left:78%; animation-duration:2.4s; animation-delay:0.6s; font-size:0.85rem;">✦</div>
+  <div class="sparkle" style="top:78%;  left:28%; animation-duration:3.3s; animation-delay:1.8s; font-size:1rem;">✦</div>
+  <div class="sparkle" style="top:40%;  left:5%;  animation-duration:2.7s; animation-delay:2.4s; font-size:0.8rem;">✦</div>
+  <div class="sparkle" style="top:30%;  right:5%; animation-duration:3s;   animation-delay:1s;   font-size:0.9rem;">✦</div>
+
+  <!-- Pétalas flutuantes -->
+  <div class="petal" style="left:4%;  animation-duration:9s;  animation-delay:0s;">🌸</div>
+  <div class="petal" style="left:18%; animation-duration:11s; animation-delay:2.5s;">🌸</div>
+  <div class="petal" style="left:38%; animation-duration:8.5s;animation-delay:5s;">🌸</div>
+  <div class="petal" style="left:62%; animation-duration:10s; animation-delay:1.2s;">🌸</div>
+  <div class="petal" style="left:80%; animation-duration:12s; animation-delay:3.5s;">🌸</div>
+  <div class="petal" style="left:52%; animation-duration:9.5s;animation-delay:7s;">🌸</div>
+
   <main class="card">
     <h1 class="titulo-principal">
       <img src="css/Imagens/Logo BilaBilu.png" alt="BilaBilu">
@@ -42,5 +65,63 @@
       <i class="fas fa-asterisk"></i>
     </div>
   </main>
+
+  <script>
+    // ── Mouse parallax nos blobs de fundo ──
+    const blob1 = document.getElementById('blob1');
+    const blob2 = document.getElementById('blob2');
+    const blob3 = document.getElementById('blob3');
+
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+      targetX = (e.clientX / window.innerWidth  - 0.5);
+      targetY = (e.clientY / window.innerHeight - 0.5);
+    });
+
+    function animateBlobs() {
+      // Suaviza o movimento (lerp)
+      currentX += (targetX - currentX) * 0.06;
+      currentY += (targetY - currentY) * 0.06;
+
+      blob1.style.transform = `translate(${currentX * 35}px, ${currentY * 35}px)`;
+      blob2.style.transform = `translate(${-currentX * 28}px, ${-currentY * 28}px)`;
+      blob3.style.transform = `translate(${currentX * 20}px, ${-currentY * 20}px)`;
+
+      requestAnimationFrame(animateBlobs);
+    }
+    animateBlobs();
+
+    // ── Efeito sparkle ao mover o mouse ──
+    let lastSparkle = 0;
+    document.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastSparkle < 120) return;
+      lastSparkle = now;
+
+      const el = document.createElement('div');
+      el.textContent = '✦';
+      el.style.cssText = `
+        position: fixed;
+        left: ${e.clientX}px;
+        top:  ${e.clientY}px;
+        pointer-events: none;
+        z-index: 9999;
+        color: rgba(191,130,117,0.75);
+        font-size: ${0.6 + Math.random() * 0.7}rem;
+        transform: translate(-50%, -50%) scale(0);
+        transition: transform 0.3s cubic-bezier(0.2,0,0,1), opacity 0.5s ease;
+      `;
+      document.body.appendChild(el);
+
+      requestAnimationFrame(() => {
+        el.style.transform = 'translate(-50%, -50%) scale(1) rotate(180deg)';
+        el.style.opacity = '0';
+      });
+
+      setTimeout(() => el.remove(), 600);
+    });
+  </script>
 </body>
 </html>
