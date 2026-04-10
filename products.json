@@ -47,6 +47,14 @@
       "price": 240,
       "image": "css/Imagens/whatsapp-image-2026-03-24-at-23.14.39-1-.jpeg",
       "category": "fe"
+    },
+    {
+      "id": 12344,
+      "title": "TESTE",
+      "description": "TESTE",
+      "price": 99999997,
+      "image": "css/Imagens/elevenlabs_image_nano-banana_faça-uma-ima..._2026-04-09t01_22_17.png",
+      "category": "personagens"
     }
   ]
 }
