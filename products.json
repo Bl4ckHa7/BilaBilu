@@ -47,6 +47,14 @@
       "price": 240,
       "image": "css/Imagens/whatsapp-image-2026-03-24-at-23.14.39-1-.jpeg",
       "category": "fe"
+    },
+    {
+      "id": 13123,
+      "title": "TESTE",
+      "description": "teste",
+      "price": 1233,
+      "category": "bebe",
+      "image": "css/Imagens/whatsapp-image-2026-03-24-at-23.19.05-3-.jpeg"
     }
   ]
 }
