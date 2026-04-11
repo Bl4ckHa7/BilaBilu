@@ -44,19 +44,6 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.titulo-principal span {
-  display: block;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
-  font-weight: 600;
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  color: #D97F77;
-  border-top: 1px solid #F2D1C9;
-  padding-top: 0.8rem;
-  margin-top: 0.3rem;
-}
-
 .titulo-principal img {
   width: 300px;
   max-width: 80vw;
