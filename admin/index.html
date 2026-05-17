@@ -1,19 +1,172 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BilaBilu - Admin</title>
-  <style>
-    body { margin: 0; font-family: sans-serif; }
-    #nc-root { min-height: 100vh; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BilaBilu · Painel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Montserrat:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="shortcut icon" href="../css/Imagens/imagem2.png" type="image/x-icon">
 </head>
 <body>
-  <!-- Netlify Identity Widget -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-  <!-- Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <!-- Tela de login -->
+    <section class="login-screen" id="login-screen">
+        <div class="login-card">
+            <img src="../css/Imagens/imagem2.png" alt="BilaBilu" class="login-logo">
+            <h1>Bila Bilu</h1>
+            <p class="login-sub">Painel de Produtos</p>
+            <button class="btn-primary" id="btn-login">
+                <i class="fas fa-sign-in-alt"></i> Entrar
+            </button>
+            <p class="login-help">Acesse com sua conta autorizada</p>
+        </div>
+    </section>
+
+    <!-- Painel principal -->
+    <main class="app" id="app" hidden>
+        <header class="app-header">
+            <div class="app-header-left">
+                <img src="../css/Imagens/imagem2.png" alt="" class="app-logo">
+                <div>
+                    <h1>Bila Bilu</h1>
+                    <span class="app-sub">Painel de Produtos</span>
+                </div>
+            </div>
+            <div class="app-header-right">
+                <a href="../index.html" class="btn-ghost" target="_blank" title="Ver loja">
+                    <i class="fas fa-store"></i><span>Ver loja</span>
+                </a>
+                <button class="btn-ghost" id="btn-logout" title="Sair">
+                    <i class="fas fa-sign-out-alt"></i><span>Sair</span>
+                </button>
+            </div>
+        </header>
+
+        <section class="toolbar">
+            <div class="toolbar-search">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="Buscar produto pelo nome...">
+            </div>
+            <div class="toolbar-filters" id="category-filters">
+                <button class="chip active" data-cat="all"><i class="fas fa-th"></i> Todos</button>
+                <button class="chip" data-cat="fe"><i class="fas fa-praying-hands"></i> Cantinho da fé</button>
+                <button class="chip" data-cat="bebe"><i class="fas fa-baby"></i> Cantinho do bebê</button>
+                <button class="chip" data-cat="personagens"><i class="fas fa-puzzle-piece"></i> Personagens</button>
+            </div>
+            <button class="btn-primary btn-add" id="btn-new">
+                <i class="fas fa-plus"></i> Novo produto
+            </button>
+        </section>
+
+        <section class="grid" id="products-grid">
+            <!-- cards injetados via JS -->
+        </section>
+
+        <div class="empty-state" id="empty-state" hidden>
+            <i class="fas fa-inbox"></i>
+            <p>Nenhum produto encontrado.</p>
+        </div>
+    </main>
+
+    <!-- Modal de edição/criação -->
+    <div class="modal" id="edit-modal" hidden>
+        <div class="modal-backdrop" data-close></div>
+        <div class="modal-card">
+            <header class="modal-head">
+                <h2 id="modal-title">Novo produto</h2>
+                <button class="modal-close" data-close aria-label="Fechar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </header>
+
+            <form id="product-form" class="modal-body" autocomplete="off">
+                <input type="hidden" id="f-id">
+
+                <div class="field">
+                    <label for="f-title">Título</label>
+                    <input type="text" id="f-title" required placeholder="Ex.: Nossa Senhora Aparecida - 24cm">
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="f-price">Preço (R$)</label>
+                        <input type="number" id="f-price" required min="0" step="1" placeholder="0">
+                    </div>
+                    <div class="field">
+                        <label for="f-category">Categoria</label>
+                        <select id="f-category" required>
+                            <option value="fe">Cantinho da fé</option>
+                            <option value="bebe">Cantinho do bebê</option>
+                            <option value="personagens">Personagens</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="f-description">Descrição</label>
+                    <textarea id="f-description" rows="6" required placeholder="Descreva o produto..."></textarea>
+                </div>
+
+                <div class="field">
+                    <label>Imagem</label>
+                    <div class="image-uploader" id="image-uploader">
+                        <input type="file" id="f-image-file" accept="image/*" hidden>
+                        <div class="image-preview" id="image-preview">
+                            <i class="fas fa-image"></i>
+                            <span>Clique para escolher uma imagem</span>
+                        </div>
+                        <input type="hidden" id="f-image">
+                    </div>
+                    <small class="hint">Tamanho máximo: 5 MB. Formatos: JPG, PNG, WEBP.</small>
+                </div>
+            </form>
+
+            <footer class="modal-foot">
+                <button class="btn-ghost" data-close>Cancelar</button>
+                <button class="btn-primary" id="btn-save">
+                    <i class="fas fa-check"></i> Salvar
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação de exclusão -->
+    <div class="modal" id="confirm-modal" hidden>
+        <div class="modal-backdrop" data-close-confirm></div>
+        <div class="modal-card modal-card-sm">
+            <header class="modal-head">
+                <h2><i class="fas fa-triangle-exclamation"></i> Excluir produto?</h2>
+            </header>
+            <div class="modal-body">
+                <p id="confirm-text">Tem certeza que deseja excluir este produto?</p>
+            </div>
+            <footer class="modal-foot">
+                <button class="btn-ghost" data-close-confirm>Cancelar</button>
+                <button class="btn-danger" id="btn-confirm-delete">
+                    <i class="fas fa-trash-alt"></i> Excluir
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Loader global -->
+    <div class="overlay-loader" id="overlay-loader" hidden>
+        <div class="spinner"></div>
+        <span id="overlay-msg">Carregando...</span>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-msg">Salvo!</span>
+    </div>
+
+    <!-- Netlify Identity -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="admin.js"></script>
 </body>
 </html>
