@@ -362,24 +362,7 @@
     });
     backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // ===== ROLAGEM SUAVE =====
-    const navLinks = document.querySelectorAll('nav a');
-    const nav = document.querySelector('nav');
-    if (navLinks.length && nav) {
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetEl = document.querySelector(link.getAttribute('href'));
-                if (targetEl) {
-                    const top = targetEl.getBoundingClientRect().top + window.scrollY - nav.offsetHeight - 10;
-                    window.scrollTo({ top, behavior: 'smooth' });
-                    history.pushState(null, null, link.getAttribute('href'));
-                }
-            });
-        });
-    }
-
-    // ===== BUSCA E FILTROS DO CATÁLOGO =====
+// ===== BUSCA E FILTROS DO CATÁLOGO =====
     const searchInput   = document.getElementById('catalog-search-input');
     const searchClear   = document.getElementById('catalog-search-clear');
     const filterChips   = document.querySelectorAll('.catalog-chip');
@@ -469,8 +452,8 @@
                               : 'personagens';
                 const targetEl = document.getElementById(targetId);
                 if (targetEl) {
-                    const navEl = document.querySelector('nav');
-                    const offset = (navEl ? navEl.offsetHeight : 60) + 80;
+                    const toolbarEl = document.querySelector('.catalog-toolbar');
+                    const offset = (toolbarEl ? toolbarEl.offsetHeight : 50) + 16;
                     window.scrollTo({ top: targetEl.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' });
                 }
             }
