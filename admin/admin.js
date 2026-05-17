@@ -290,8 +290,8 @@ function setImagePreview(src) {
 function handleImageFile(e) {
     const file = e.target.files[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-        toast('Imagem maior que 5 MB', true);
+    if (file.size > 30 * 1024 * 1024) {
+        toast('Imagem maior que 30 MB', true);
         e.target.value = '';
         return;
     }
