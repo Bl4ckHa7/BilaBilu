@@ -1290,10 +1290,39 @@ html { scroll-padding-top: 150px; }
 .header-tagline {
     font-size: 1.1rem;
     color: #7a4337;
-    max-width: 540px;
+    max-width: 720px;
     margin: 0 auto;
     font-weight: 500;
     line-height: 1.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.header-tagline-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-align: left;
+    flex: 0 1 auto;
+}
+.header-tagline-img {
+    width: 7rem;
+    height: auto;
+    flex-shrink: 0;
+    margin-left: auto;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.15));
+    animation: floatSheep 4s ease-in-out infinite;
+}
+@keyframes floatSheep {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50%      { transform: translateY(-6px) rotate(2deg); }
+}
+
+@media (max-width: 600px) {
+    .header-tagline { gap: 0.6rem; max-width: 100%; padding: 0 0.6rem; }
+    .header-tagline-text { font-size: 0.9rem; }
+    .header-tagline-img { width: 4.5rem; margin-left: 0.4rem; }
 }
 
 /* ===== Hero strip — selos de confiança ===== */
